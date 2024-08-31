@@ -1,0 +1,95 @@
+/* Reset CSS complet */
+
+/* Supprimer les marges, paddings et bordures pour tous les éléments */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 0;
+}
+
+/* Configurer les typographies de base */
+body, html {
+    height: 100%;
+    line-height: 1.5;
+    font-family: sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Retirer les décorations de liens */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Annuler les styles de liste */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Réinitialiser les styles de tableau */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Réinitialiser les styles des éléments de formulaire */
+button,
+input,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
+}
+
+/* Réinitialiser les images */
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Gérer les conteneurs flexibles */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style par défaut pour les en-têtes */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
+/* Mettre à jour les styles pour les boîtes de défilement */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+}
