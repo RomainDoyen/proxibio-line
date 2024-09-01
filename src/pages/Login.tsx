@@ -37,8 +37,8 @@ const Login: React.FC = () => {
 
       // Extraire les données utilisateur pertinentes de la session
       const userFromSession = {
-        name: session.userName || "Nom inconnu",
-        email: session.userEmail || "Email inconnu",
+        name: session.clientName || "Nom inconnu",
+        email: session.providerUid || "Email inconnu",
         id: session.userId,
       };
 
