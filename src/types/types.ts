@@ -1,7 +1,8 @@
 export type User = {
-  name: string;
+  name?: string;
   email: string;
   id?: string;
+  providerUid?: string;
 };
 
 export type UserAuthContextType = {
