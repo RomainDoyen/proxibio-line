@@ -1,6 +1,6 @@
 import React from "react";
 import { IoIosArrowDown } from "react-icons/io";
-// import './Header.css'
+import './Header.css'
 
 export default function Header(): React.JSX.Element {
   return (

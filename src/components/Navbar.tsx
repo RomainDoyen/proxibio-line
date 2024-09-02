@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-// import "./Navbar.css";
+import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { account } from "../config/index";
