@@ -14,3 +14,14 @@ export type UserAuthContextType = {
 export type UserProviderProps = {
   children: React.ReactNode;
 };
+
+export type Session = {
+  userId: string;
+  providerUid: string;
+  clientName: string;
+};
+
+export type IconOption = {
+  iconUrl: string;
+  iconSize: [number, number];
+};
