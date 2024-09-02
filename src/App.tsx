@@ -4,15 +4,17 @@ import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
 
   return (
     <>
-      <h1>ProxyBioLine</h1>
       <Toaster position="top-right" reverseOrder={false} />
       <Navbar />
+      <Header />
       <div className="f">
         <div className="form-container"></div>
         <Routes>
@@ -24,6 +26,7 @@ function App() {
           </Route>
         </Routes>
       </div>
+      <Footer />
     </>
   )
 }
