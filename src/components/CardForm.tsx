@@ -3,6 +3,7 @@ import { supabase } from "../config/index";
 import { useState } from 'react';
 import { geocodeAddress, searchAddress } from '../utils/function';
 import { SuggestionType, CardFormProps } from '../types/types';
+import './CardForm.css';
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
 
