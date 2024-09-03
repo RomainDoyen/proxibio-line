@@ -1,10 +1,19 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 // import "./Dashboard.css";
 import { UserAuthContext } from "../context/UserAuthContext";
 import { UserAuthContextType } from "../types/types";
+import CardInfos from "../components/CardInfos";
+import CardForm from "../components/CardForm";
 
 const Dashboard: React.FC = () => {
   const { user } = useContext<UserAuthContextType | undefined>(UserAuthContext) || {};
+
+  const [refreshMap, setRefreshMap] = useState<boolean>(false);
+
+  const handleProducteurAdded = () => {
+    // Change the state to trigger the map refresh
+    setRefreshMap(prev => !prev);
+  };
 
   // console.log(user);
   
@@ -19,11 +28,11 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="dashboard-container">
         <div className="form-container">
-
+          <CardForm onProducteurAdded={handleProducteurAdded} />
           <img src="./src/assets/loca.PNG" />
         </div>
         <div className="map-container">
-
+          <CardInfos />
         </div>
       </div>
     </>

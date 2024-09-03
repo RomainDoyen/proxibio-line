@@ -22,7 +22,9 @@ export type Session = {
 };
 
 export type IconOption = {
+  getChildCount(): unknown;
   iconUrl: string;
+  className?: string;
   iconSize: [number, number];
 };
 
@@ -44,3 +46,22 @@ export type PositionProducteurType = {
   marker: string;
   producteur: ProducteurType;
 }
+
+export type GeocodeResult = {
+  latitude: number;
+  longitude: number;
+}
+
+export type SearchResult = {
+  display_name: string;
+  lat: string;
+  lon: string;
+}
+
+export type SuggestionType = {
+  display_name: string;
+};
+
+export type CardFormProps = {
+  onProducteurAdded: () => void;
+};
