@@ -1,0 +1,87 @@
+.registerPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  /* background-color: #203B2C; */
+  padding: 20px;
+}
+
+.registerPage h2 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+form {
+  /* background-color: #333; */
+  background-color: #16283A;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #a5a5a5;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #77a577;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #77a577;
+  transition: border-color 0.3s ease;
+}
+
+input[type="email"], input[type="password"], input[type="text"] {
+  background-color: #203952;
+}
+
+.form-control:focus {
+  border-color: #669966;
+  outline: none;
+  box-shadow: 0 0 5px #6c9a6c;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #669966;
+  color: #16283a;
+}
+
+.btn-primary:hover {
+  background-color: #507c50;
+}
+
+.reg {
+  margin-top: 15px;
+  color: #a5a5a5;
+}
+
+.reg a {
+  color: #669966;
+}
