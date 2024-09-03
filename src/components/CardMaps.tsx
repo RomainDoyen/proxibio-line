@@ -5,7 +5,7 @@ import { abIcon, venteDirectIcon } from "../utils/customMarker";
 import { supabase } from "../config/index";
 import { useState, useEffect } from "react";
 import { createClusterCustomIcon } from "../utils/function";
-// import './CardMaps.css';
+import './CardMaps.css';
 import { CardMapsProps, ProducteurType } from "../types/types";
 
 export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
