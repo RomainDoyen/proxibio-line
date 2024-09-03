@@ -65,3 +65,7 @@ export type SuggestionType = {
 export type CardFormProps = {
   onProducteurAdded: () => void;
 };
+
+export type CardMapsProps = {
+  refreshMap: boolean;
+};

@@ -4,6 +4,7 @@ import { UserAuthContext } from "../context/UserAuthContext";
 import { UserAuthContextType } from "../types/types";
 import CardInfos from "../components/CardInfos";
 import CardForm from "../components/CardForm";
+import CardMaps from "../components/CardMaps";
 
 const Dashboard: React.FC = () => {
   const { user } = useContext<UserAuthContextType | undefined>(UserAuthContext) || {};
@@ -33,6 +34,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="map-container">
           <CardInfos />
+          <CardMaps refreshMap={refreshMap} />
         </div>
       </div>
     </>
