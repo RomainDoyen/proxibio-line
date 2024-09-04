@@ -1,19 +1,11 @@
-import { divIcon, point, Point, DivIcon } from "leaflet";
-import { IconOption, GeocodeResult, SearchResult } from "../types/types";
+import L, { point, Point, DivIcon, MarkerCluster } from "leaflet";
+import { GeocodeResult, SearchResult } from "../types/types";
 
-// export const createClusterCustomIcon = function (cluster: IconOption): DivIcon {
-//   return new divIcon({
-//     html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
-//     className: "custom-marker-cluster",
-//     iconSize: point(33, 33, true) as Point
-//   });
-// };
-
-export const createClusterCustomIcon = function (cluster: IconOption): DivIcon {
-  return divIcon({
+export const createClusterCustomIcon = function (cluster: MarkerCluster): DivIcon {
+  return L.divIcon({
     html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
     className: "custom-marker-cluster",
-    iconSize: point(33, 33, true) as Point  // Assurez-vous que 'point' renvoie un Point
+    iconSize: point(33, 33, true) as Point
   });
 };
 

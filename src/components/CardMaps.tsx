@@ -1,5 +1,5 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { abIcon, venteDirectIcon } from "../utils/customMarker";
 import { supabase } from "../config/index";
@@ -34,7 +34,7 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
 
           return {
             ...producteur,
-            positionProducteurs: positionsData || [],
+            positionProducteur: positionsData || [],
           };
         })
       );
@@ -74,10 +74,13 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
               <Popup>
                 <div>
                   <strong>{producteur.name}</strong><br />
-                  <em>{producteur.nameEnteprise}</em><br />
+                  <em>{producteur.nameEnterprise}</em><br />
                   {producteur.address}
                 </div>
               </Popup>
+              <Tooltip direction="top" offset={[0, -10]}>
+                {producteur.nameEnterprise}
+              </Tooltip>
             </Marker>
           );
         })}

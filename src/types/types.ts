@@ -22,7 +22,6 @@ export type Session = {
 };
 
 export type IconOption = {
-  getChildCount(): unknown;
   iconUrl: string;
   className?: string;
   iconSize: [number, number];
@@ -31,7 +30,7 @@ export type IconOption = {
 export type ProducteurType = {
   id: number;
   name: string;
-  nameEnteprise: string;
+  nameEnterprise: string;
   address: string;
   createdAt: Date;
   updatedAt: Date;

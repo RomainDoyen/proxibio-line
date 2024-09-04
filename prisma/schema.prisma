@@ -16,11 +16,11 @@ datasource db {
 model Producteur {
   id        Int      @id @default(autoincrement())
   name      String
-  nameEnteprise String
-  adress    String
+  nameEnterprise String
+  address   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt 
-  positionProducteurs positionProducteur[]
+  positionProducteur positionProducteur[]
 }
 
 model positionProducteur {
@@ -29,5 +29,5 @@ model positionProducteur {
   latitude  Float
   longitude Float
   marker    String
-  producteur  Producteur @relation(fields: [producteurId], references: [id])
+  producteur Producteur @relation(fields: [producteurId], references: [id])
 }
