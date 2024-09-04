@@ -9,18 +9,18 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true); 
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response: User = await account.get(); 
-        setUser(response); 
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchUserData = async () => {
+    try {
+      const response: User = await account.get(); 
+      setUser(response); 
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données utilisateur :", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserData();
   }, []);
 
