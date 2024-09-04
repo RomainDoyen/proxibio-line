@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { geocodeAddress, searchAddress } from '../utils/function';
 import { SuggestionType, CardFormProps } from '../types/types';
 import './CardForm.css';
+import toast from "react-hot-toast";
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
   // État pour les champs du formulaire
@@ -55,7 +56,13 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
       }
 
       if (existingProducteurs && existingProducteurs.length > 0) {
-        alert("Cette adresse existe déjà dans la base de données.");
+        toast.error("Cette adresse existe déjà dans la base de données.", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
         return;
       }
 
@@ -83,6 +90,13 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
 
         // Appeler la fonction pour notifier que le producteur a été ajouté
         onProducteurAdded();
+        toast.success("Producteur ajouté avec succès 🚀", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
 
         // Réinitialiser les champs du formulaire après l'ajout réussi
         setName('');
@@ -96,6 +110,13 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
 
     } catch (error) {
       console.error("Erreur lors de l'ajout du producteur :", (error as Error).message);
+      toast.error("Erreur lors de l'ajout du producteur", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   };
 
