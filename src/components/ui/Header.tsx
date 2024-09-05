@@ -1,6 +1,7 @@
 import React from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import './Header.css'
+import Button from "./Button";
 
 export default function Header(): React.JSX.Element {
   return (
@@ -11,7 +12,12 @@ export default function Header(): React.JSX.Element {
           D'un simple clic, renseignez-vous sur l'actualité des productions de fruits et légumes 
           dans votre secteur géographique en consultant directement les producteurs près de chez vous.
         </h2>
-        <button className="cta-button">Commencez maintenant&nbsp;<IoIosArrowDown size={'2em'}/></button>
+        <Button 
+          type="button"
+          text="Commencez maintenant"
+          className="cta-button"
+          icon={<IoIosArrowDown size={'2em'}/>}
+        />
       </div>
     </header>
   )

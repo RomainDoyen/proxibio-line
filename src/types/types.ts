@@ -70,12 +70,12 @@ export type CardMapsProps = {
 };
 
 export type InputProps = {
-  type: string
-  className?: string
-  id: string
-  placeholder: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  type: string;
+  className?: string;
+  id: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export type AvatarProps = {
@@ -83,8 +83,9 @@ export type AvatarProps = {
 };
 
 export type ButtonProps = {
-  type?: "button" | "submit" | "reset",
-  text: string,
-  onClick?: () => void,
-  className: string
+  type?: "button" | "submit" | "reset";
+  text: string | JSX.Element;
+  onClick?: () => void;
+  className: string;
+  icon?: JSX.Element;
 }
