@@ -9,10 +9,10 @@ import toast from "react-hot-toast";
 import { UserAuthContextType } from "../types/types";
 import { FaUserCircle } from "react-icons/fa";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const { user, setUser } = useContext(UserAuthContext) as UserAuthContextType;
   const navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // État pour contrôler le menu déroulant
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); // État pour contrôler le menu déroulant
 
   // Timer pour l'inactivité
   let inactivityTimeout: NodeJS.Timeout;
