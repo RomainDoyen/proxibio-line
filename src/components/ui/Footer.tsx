@@ -1,12 +1,13 @@
 import React from 'react';
 import './Footer.css';
+import Image from './Image';
 
 export default function Footer(): React.JSX.Element {
   return (
     <footer className='footer'>
       <div className="footer-content">
         <div className="footer-logo">
-          <img src="./src/assets/ab.png" alt="Logo" />
+          <Image src="./src/assets/ab.png" alt="Logo" />
           <p>Made in Design And Creation</p>
           <p className="footer-text">&copy; 2021 - {new Date().getFullYear()} ProxyBio-Line, Tous droits réservés.</p>
         </div>

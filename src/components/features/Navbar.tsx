@@ -7,6 +7,8 @@ import { UserAuthContext } from "../../context/UserAuthContext";
 import { UserAuthContextType } from "../../types/types";
 import Avatar from "../ui/Avatar";
 import "./Navbar.css";
+import Image from "../ui/Image";
+import Button from "../ui/Button";
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useContext(UserAuthContext) as UserAuthContextType;
@@ -100,8 +102,8 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-logo">
-          <img src="./src/assets/ab.png" alt="Logo" /> 
+        <div className="navbar-logo"> 
+          <Image src="./src/assets/ab.png" alt="Logo" />
           <p>ProxyBioLine</p>
         </div>
         <div className="navbar-links">
@@ -115,9 +117,11 @@ const Navbar: React.FC = () => {
                 <div className="user-dropdown">
                   <p><strong>Nom:</strong> {user?.name || user?.providerUid}</p>
                   <p><strong>Email:</strong> {user?.email || user?.providerUid}</p>
-                  <button onClick={handleLogout} className="nav-button">
-                    Se déconnecter
-                  </button>
+                  <Button 
+                    text="Se déconnecter"
+                    onClick={handleLogout}
+                    className="nav-button"
+                  />
                 </div>
               )}
             </div>

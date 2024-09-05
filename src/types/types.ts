@@ -89,3 +89,8 @@ export type ButtonProps = {
   className: string;
   icon?: JSX.Element;
 }
+
+export type ImageProps = {
+  src: string;
+  alt: string;
+};

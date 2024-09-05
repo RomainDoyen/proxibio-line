@@ -3,13 +3,13 @@ import CardForm from "../components/features/CardForm";
 import CardInfos from "../components/features/CardInfos";
 import CardMaps from "../components/features/CardMaps";
 import "./Dashboard.css";
+import Image from "../components/ui/Image";
 
 const Dashboard: React.FC = () => {
 
   const [refreshMap, setRefreshMap] = useState<boolean>(false);
 
   const handleProducteurAdded = () => {
-    // Changer l'état pour rafraîchir la carte
     setRefreshMap(prev => !prev);
   };
   
@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
       <div className="dashboard-container">
         <div className="form-container">
           <CardForm onProducteurAdded={handleProducteurAdded} />
-          <img src="./src/assets/loca.PNG" />
+          <Image src="./src/assets/loca.PNG" alt="Instruction" />
         </div>
         <div className="map-container">
           <CardInfos />
