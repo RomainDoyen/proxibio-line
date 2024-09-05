@@ -1,10 +1,9 @@
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import { abIcon, venteDirectIcon } from "../utils/customMarker";
+import { abIcon, venteDirectIcon, createClusterCustomIcon } from "../utils/customMarker";
 import { supabase } from "../config/index";
 import { useState, useEffect } from "react";
-import { createClusterCustomIcon } from "../utils/function";
 import './CardMaps.css';
 import { CardMapsProps, ProducteurType } from "../types/types";
 

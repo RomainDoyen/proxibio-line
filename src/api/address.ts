@@ -1,13 +1,4 @@
-import L, { point, Point, DivIcon, MarkerCluster } from "leaflet";
 import { GeocodeResult, SearchResult } from "../types/types";
-
-export const createClusterCustomIcon = function (cluster: MarkerCluster): DivIcon {
-  return L.divIcon({
-    html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
-    className: "custom-marker-cluster",
-    iconSize: point(33, 33, true) as Point
-  });
-};
 
 export const geocodeAddress = async (address: string): Promise<GeocodeResult> => {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;

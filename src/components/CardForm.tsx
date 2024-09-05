@@ -1,7 +1,7 @@
 import { abIcon, venteDirectIcon } from '../utils/customMarker';
 import { supabase } from "../config/index";
 import { useState } from 'react';
-import { geocodeAddress, searchAddress } from '../utils/function';
+import { geocodeAddress, searchAddress } from '../api/address';
 import { SuggestionType, CardFormProps } from '../types/types';
 import './CardForm.css';
 import toast from "react-hot-toast";
