@@ -4,7 +4,7 @@ import "./Register.css";
 import { account } from "../config/index";
 import { ID, Models } from "appwrite";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { errorMessage, successMessage } from "../utils/customToast";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 
@@ -22,13 +22,7 @@ const Register: React.FC = () => {
     try {
       // Call Appwrite function to handle user registration
       if (password !== confirmPassword) {
-        toast.error("Les mots de passe ne correspondent pas", {
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#fff',
-          },
-        })
+        errorMessage("Les mots de passe ne correspondent pas");
         setLoadingStatus(false)
         return;
       }
@@ -38,25 +32,13 @@ const Register: React.FC = () => {
         password === "" ||
         confirmPassword === ""
       ) {
-        toast.error("Veuillez remplir tous les champs", {
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#fff',
-          },
-        })
+        errorMessage("Veuillez remplir tous les champs");
         setLoadingStatus(false);
         return;
       }
 
       if (password.length < 8) {
-        toast.error("Le mot de passe doit contenir 8 caractères", {
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#fff',
-          },
-        })
+        errorMessage("Le mot de passe doit contenir 8 caractères");
         setLoadingStatus(false);
         return;
       }
@@ -66,22 +48,16 @@ const Register: React.FC = () => {
       promise.then(
         function (response: Models.User<Models.Preferences>) {
           console.log(response); // Success
-          toast.success("Compte créé avec succès 🚀", {
-            style: {
-              borderRadius: '10px',
-              background: '#333',
-              color: '#fff',
-            },
-          });
+          successMessage("Compte créé avec succès 🚀");
           navigate("/login");
         },
         function (error) {
           console.log(error); // Failure
-          alert(error);
+          errorMessage("Erreur lors de la création du compte");
         }
       );
     } catch (err) {
-      alert((err as Error).message);
+      console.log((err as Error).message);
     }
   };
 

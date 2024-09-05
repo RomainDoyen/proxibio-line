@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import toast from "react-hot-toast";
+import { errorMessage, successMessage } from '../../utils/customToast';
 import { geocodeAddress, searchAddress } from '../../api/address';
 import { supabase } from "../../config/index";
 import { CardFormProps, SuggestionType } from '../../types/types';
@@ -58,13 +58,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
       }
 
       if (existingProducteurs && existingProducteurs.length > 0) {
-        toast.error("Cette adresse existe déjà dans la base de données.", {
-          style: {
-            borderRadius: "10px",
-            background: "#333",
-            color: "#fff",
-          },
-        });
+        errorMessage("Cette adresse existe déjà dans la base de données.");
         return;
       }
 
@@ -92,13 +86,8 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
 
         // Appeler la fonction pour notifier que le producteur a été ajouté
         onProducteurAdded();
-        toast.success("Producteur ajouté avec succès 🚀", {
-          style: {
-            borderRadius: "10px",
-            background: "#333",
-            color: "#fff",
-          },
-        });
+
+        successMessage("Producteur ajouté avec succès 🚀");
 
         // Réinitialiser les champs du formulaire après l'ajout réussi
         setName('');
@@ -112,13 +101,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
 
     } catch (error) {
       console.error("Erreur lors de l'ajout du producteur :", (error as Error).message);
-      toast.error("Erreur lors de l'ajout du producteur", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      errorMessage("Erreur lors de l'ajout du producteur");
     }
   };
 

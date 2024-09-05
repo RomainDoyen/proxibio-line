@@ -4,7 +4,7 @@ import "./Login.css";
 import { account } from "../config/index";
 import { useNavigate } from "react-router-dom";
 import { UserAuthContext } from "../context/UserAuthContext";
-import toast from "react-hot-toast";
+import { errorMessage, successMessage } from "../utils/customToast";
 import { UserAuthContextType } from "../types/types";
 import { Models } from "appwrite";
 import Button from "../components/ui/Button";
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
     setButtonLoading(true);
 
     if (password === "" || email === "") {
-      toast.error("Veuillez remplir le champ requis");
+      errorMessage("Veuillez remplir le champ requis");
       setButtonLoading(false);
       return;
     }
@@ -44,26 +44,14 @@ const Login: React.FC = () => {
         id: session.userId,
       };
 
-      toast.success("Connexion réussie 🚀", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      successMessage("Connexion réussie 🚀");
 
       // Mettre à jour l'utilisateur avec les informations extraites
       setUser(userFromSession);
       navigate("/");
     } catch (error) {
       console.log(error);
-      toast.error("Veuillez vérifier vos informations: email et mot de passe", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      errorMessage("Erreur lors de la connexion");
     } finally {
       setButtonLoading(false);
     }

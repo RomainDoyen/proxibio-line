@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { successMessage } from "../../utils/customToast";
 import { Link, useNavigate } from "react-router-dom";
 import { account } from "../../config/index";
 import { UserAuthContext } from "../../context/UserAuthContext";
@@ -13,53 +13,35 @@ import Button from "../ui/Button";
 const Navbar: React.FC = () => {
   const { user, setUser } = useContext(UserAuthContext) as UserAuthContextType;
   const navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); // État pour contrôler le menu déroulant
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  // Timer pour l'inactivité
   let inactivityTimeout: NodeJS.Timeout;
 
   const handleLogout = async () => {
     try {
       await account.deleteSession("current");
       setUser(null);
-      toast.success("Déconnecté avec succès 🚀", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      successMessage("Déconnecté avec succès 🚀");
       navigate("/login");
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Fonction pour gérer l'inactivité
   const resetInactivityTimeout = () => {
     clearTimeout(inactivityTimeout);
     inactivityTimeout = setTimeout(() => {
       handleLogout();
-      toast.success("Déconnecté pour cause d'inactivité 🕒", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      successMessage("Déconnecté pour cause d'inactivité 🕒");
     }, 5 * 60 * 1000); // 5 minutes d'inactivité
   };
 
   // Gestion de l'inactivité (mouvement de la souris, clic, touche pressée)
   useEffect(() => {
     if (user) {
-      // Événements pour réinitialiser le timer d'inactivité
       window.addEventListener("mousemove", resetInactivityTimeout);
       window.addEventListener("keydown", resetInactivityTimeout);
-
-      resetInactivityTimeout(); // Initialiser le timer d'inactivité
-
-      // Marquer l'utilisateur comme connecté dans le localStorage
+      resetInactivityTimeout();
       localStorage.setItem("isLoggedIn", "true");
     }
 
@@ -74,7 +56,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (user) {
-        localStorage.setItem("isLoggedIn", "true"); // Marquer comme connecté
+        localStorage.setItem("isLoggedIn", "true");
       }
     };
 
@@ -107,9 +89,7 @@ const Navbar: React.FC = () => {
           <p>ProxyBioLine</p>
         </div>
         <div className="navbar-links">
-          <Link to="/" className="nav-link">
-            Accueil
-          </Link>
+          <Link to="/" className="nav-link">Accueil</Link>
           {user ? (
             <div className="user-profile">
               <Avatar toggleDropdown={toggleDropdown} />
