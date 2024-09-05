@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { errorMessage, successMessage } from "../utils/customToast";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import Loader from "../components/ui/Loader";
+import { TailSpin } from 'react-loader-spinner';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -107,7 +109,19 @@ const Register: React.FC = () => {
         </div>
         <Button 
           type="submit"
-          text={loadingStatus ? "Chargement..." : "S'enregistrer"}
+          text={loadingStatus ? <Loader 
+            text="Chargement..."
+            loader={<TailSpin
+              visible={true}
+              height="20"
+              width="20"
+              color="#16283a"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              />}
+          /> : "S'enregistrer"}
           className="btn btn-primary"
         />
         <div className="reg">

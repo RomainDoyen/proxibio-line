@@ -94,3 +94,8 @@ export type ImageProps = {
   src: string;
   alt: string;
 };
+
+export type LoaderProps = {
+  text: string
+  loader: JSX.Element
+}

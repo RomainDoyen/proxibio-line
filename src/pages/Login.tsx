@@ -9,6 +9,8 @@ import { UserAuthContextType } from "../types/types";
 import { Models } from "appwrite";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import Loader from "../components/ui/Loader";
+import { TailSpin } from 'react-loader-spinner';
 
 const Login: React.FC = () => {
   const { setUser, user } = useContext(UserAuthContext) as UserAuthContextType;
@@ -83,7 +85,19 @@ const Login: React.FC = () => {
         </div>
         <Button 
           type="submit"
-          text={buttonLoading ? "Chargement..." : "Connexion"}
+          text={buttonLoading ? <Loader 
+            text="Chargement..."
+            loader={<TailSpin
+              visible={true}
+              height="20"
+              width="20"
+              color="#16283a"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              />}
+          /> : "Connexion"}
           className="btn btn-primary"
         />
         <div className="reg">
