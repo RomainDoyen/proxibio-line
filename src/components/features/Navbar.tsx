@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link } from "react-router-dom";
-import "./Navbar.css";
-import { useNavigate } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
-import { account } from "../config/index";
-import { UserAuthContext } from "../context/UserAuthContext";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { UserAuthContextType } from "../types/types";
-import { FaUserCircle } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { account } from "../../config/index";
+import { UserAuthContext } from "../../context/UserAuthContext";
+import { UserAuthContextType } from "../../types/types";
+import Avatar from "../ui/Avatar";
+import "./Navbar.css";
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useContext(UserAuthContext) as UserAuthContextType;
@@ -111,9 +110,7 @@ const Navbar: React.FC = () => {
           </Link>
           {user ? (
             <div className="user-profile">
-              <div className="user-avatar" onClick={toggleDropdown}>
-                <FaUserCircle size={40} color="#507c50" />
-              </div>
+              <Avatar toggleDropdown={toggleDropdown} />
               {isDropdownOpen && (
                 <div className="user-dropdown">
                   <p><strong>Nom:</strong> {user?.name || user?.providerUid}</p>
@@ -125,9 +122,7 @@ const Navbar: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="user-avatar">
-                <FaUserCircle size={40} color="#507c50" />
-            </div>
+            <Avatar toggleDropdown={toggleDropdown} />
           )}
         </div>
       </div>

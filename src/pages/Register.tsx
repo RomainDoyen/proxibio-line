@@ -5,6 +5,8 @@ import { account } from "../config/index";
 import { ID, Models } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -89,53 +91,49 @@ const Register: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Nom d'utilisateur:</label>
-          <input
-            type="text"
-            required
-            id="username"
+          <Input 
+            type='text'
+            id="username" 
+            placeholder="Nom d'utilisateur..." 
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="form-control" 
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            required
-            id="email"
+          <Input 
+            type='email'
+            id="email" 
+            placeholder="Email..." 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="form-control" 
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="password">Mot de passe:</label>
-          <input
-            type="password"
-            required
-            id="password"
+          <Input 
+            type='password'
+            id="password" 
+            placeholder="Mot de passe..." 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="form-control" 
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirmer le mot de passe:</label>
-          <input
-            type="password"
-            required
-            id="confirmPassword"
+          <Input 
+            type='password'
+            id="confirmPassword" 
+            placeholder="Confirmer le mot de passe..." 
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="form-control" 
           />
         </div>
-        <button type="submit" className="btn btn-primary">{loadingStatus ? "Chargement..." : "S'enregistrer"}</button>
-
+        <Button 
+          type="submit"
+          text={loadingStatus ? "Chargement..." : "S'enregistrer"}
+          className="btn btn-primary"
+        />
         <div className="reg">
           Vous avez un compte ? <Link to="/login">Connexion</Link>
         </div>

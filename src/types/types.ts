@@ -68,3 +68,23 @@ export type CardFormProps = {
 export type CardMapsProps = {
   refreshMap: boolean;
 };
+
+export type InputProps = {
+  type: string
+  className?: string
+  id: string
+  placeholder: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export type AvatarProps = {
+  toggleDropdown: () => void;
+};
+
+export type ButtonProps = {
+  type?: "button" | "submit" | "reset",
+  text: string,
+  onClick?: () => void,
+  className: string
+}

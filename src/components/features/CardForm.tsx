@@ -1,10 +1,12 @@
-import { abIcon, venteDirectIcon } from '../utils/customMarker';
-import { supabase } from "../config/index";
 import { useState } from 'react';
-import { geocodeAddress, searchAddress } from '../api/address';
-import { SuggestionType, CardFormProps } from '../types/types';
-import './CardForm.css';
 import toast from "react-hot-toast";
+import { geocodeAddress, searchAddress } from '../../api/address';
+import { supabase } from "../../config/index";
+import { CardFormProps, SuggestionType } from '../../types/types';
+import { abIcon, venteDirectIcon } from '../../utils/customMarker';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
+import './CardForm.css';
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
   // État pour les champs du formulaire
@@ -121,29 +123,25 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
   };
 
   return (
-    <form action="" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="name">Nom du producteur</label>
-        <input 
-          type="text" 
-          className="form-control" 
+        <Input 
+          type='text'
           id="name" 
           placeholder="Nom du producteur..." 
           value={name}
           onChange={(e) => setName(e.target.value)}
-          required 
         />
       </div>
       <div className="form-group">
         <label htmlFor="address">L'adresse du producteur</label>
-        <input 
-          type="text" 
-          className="form-control" 
+        <Input 
+          type='text'
           id="address" 
           placeholder="L'adresse du producteur..." 
-          value={selectedAddress} 
+          value={selectedAddress}
           onChange={handleAddressChange}
-          required
         />
         {suggestions.length > 0 && (
           <ul className="suggestions-list">
@@ -159,14 +157,12 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
       </div>
       <div className="form-group">
         <label htmlFor="name-enterprise">Nom de l'entreprise</label>
-        <input 
-          type="text" 
-          className="form-control" 
+        <Input 
+          type='text'
           id="name-enterprise" 
           placeholder="Nom de l'entreprise..." 
           value={nameEnterprise}
           onChange={(e) => setNameEnterprise(e.target.value)}
-          required 
         />
       </div>
       <div className="form-group">
@@ -182,7 +178,11 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           {venteDirectIcon && <option value="venteDirect">Vente directe</option>}
         </select>
       </div>
-      <button type="submit" className="btn btn-primary">Envoyer</button>
+      <Button
+        type="submit"
+        text="Envoyer" 
+        className='btn btn-primary'
+      />
     </form>
   );
 }

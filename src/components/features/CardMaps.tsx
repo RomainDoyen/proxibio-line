@@ -1,11 +1,11 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
+import { useEffect, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import { abIcon, venteDirectIcon, createClusterCustomIcon } from "../utils/customMarker";
-import { supabase } from "../config/index";
-import { useState, useEffect } from "react";
+import { supabase } from "../../config/index";
+import { CardMapsProps, ProducteurType } from "../../types/types";
+import { abIcon, createClusterCustomIcon, venteDirectIcon } from "../../utils/customMarker";
 import './CardMaps.css';
-import { CardMapsProps, ProducteurType } from "../types/types";
 
 export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
   const [producteurs, setProducteurs] = useState<ProducteurType[]>([]);

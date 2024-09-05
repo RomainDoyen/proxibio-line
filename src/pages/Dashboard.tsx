@@ -1,8 +1,8 @@
 import { useState } from "react";
+import CardForm from "../components/features/CardForm";
+import CardInfos from "../components/features/CardInfos";
+import CardMaps from "../components/features/CardMaps";
 import "./Dashboard.css";
-import CardInfos from "../components/CardInfos";
-import CardForm from "../components/CardForm";
-import CardMaps from "../components/CardMaps";
 
 const Dashboard: React.FC = () => {
 

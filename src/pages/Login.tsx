@@ -7,6 +7,8 @@ import { UserAuthContext } from "../context/UserAuthContext";
 import toast from "react-hot-toast";
 import { UserAuthContextType } from "../types/types";
 import { Models } from "appwrite";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
 
 const Login: React.FC = () => {
   const { setUser, user } = useContext(UserAuthContext) as UserAuthContextType;
@@ -73,34 +75,29 @@ const Login: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            required
-            id="email"
+          <Input 
+            type='email'
+            id="email" 
+            placeholder="Email..." 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="form-control"
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="password">Mot de passe:</label>
-          <input
-            type="password"
-            required
-            id="password"
+          <Input 
+            type='password'
+            id="password" 
+            placeholder="Mot de passe..." 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="form-control"
           />
         </div>
-        <button 
+        <Button 
           type="submit"
+          text={buttonLoading ? "Chargement..." : "Connexion"}
           className="btn btn-primary"
-        >
-          {buttonLoading ? "Chargement..." : "Connexion"}
-        </button>
-
+        />
         <div className="reg">
           Vous n'avez pas de compte ? <Link to="/register">S'enregistrer</Link>
         </div>

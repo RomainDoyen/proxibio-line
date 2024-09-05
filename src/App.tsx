@@ -1,12 +1,12 @@
+import { Toaster } from 'react-hot-toast';
 import { Route, Routes } from 'react-router-dom';
+import Navbar from './components/features/Navbar';
+import PrivateRoute from './components/features/PrivateRoute';
+import Footer from './components/ui/Footer';
+import Header from './components/ui/Header';
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import { Toaster } from 'react-hot-toast';
 
 function App() {
 
