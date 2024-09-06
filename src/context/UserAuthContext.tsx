@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { account } from "../config/index";
-import { User, UserAuthContextType, UserProviderProps } from "../types/types";
+import { User, UserAuthContextType, UserProviderProps } from "../types/userTypes";
 
 export const UserAuthContext = createContext<UserAuthContextType | undefined>(undefined);
 

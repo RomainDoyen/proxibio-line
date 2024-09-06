@@ -1,4 +1,4 @@
-import { LoaderProps } from "../../types/types"
+import { LoaderProps } from "../../types/uiTypes";
 
 export default function Loader({ text, loader }: LoaderProps) {
   return (

@@ -4,7 +4,7 @@ import { successMessage } from "../../utils/customToast";
 import { Link, useNavigate } from "react-router-dom";
 import { account } from "../../config/index";
 import { UserAuthContext } from "../../context/UserAuthContext";
-import { UserAuthContextType } from "../../types/types";
+import { UserAuthContextType } from "../../types/userTypes";
 import Avatar from "../ui/Avatar";
 import "./Navbar.css";
 import Image from "../ui/Image";

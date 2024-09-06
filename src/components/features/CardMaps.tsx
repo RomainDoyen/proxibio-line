@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { supabase } from "../../config/index";
-import { CardMapsProps, ProducteurType } from "../../types/types";
+import { CardMapsProps } from "../../types/uiTypes";
+import { ProducteurType } from "../../types/productTypes";
 import { abIcon, createClusterCustomIcon, venteDirectIcon } from "../../utils/customMarker";
 import './CardMaps.css';
 

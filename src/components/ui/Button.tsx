@@ -1,4 +1,4 @@
-import { ButtonProps } from "../../types/types"
+import { ButtonProps } from "../../types/uiTypes";
 
 export default function Button({ type, text, onClick, className, icon }: ButtonProps) {
   return (

@@ -5,7 +5,7 @@ import { account } from "../config/index";
 import { useNavigate } from "react-router-dom";
 import { UserAuthContext } from "../context/UserAuthContext";
 import { errorMessage, successMessage } from "../utils/customToast";
-import { UserAuthContextType } from "../types/types";
+import { UserAuthContextType } from "../types/userTypes";
 import { Models } from "appwrite";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";

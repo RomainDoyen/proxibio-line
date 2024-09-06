@@ -1,4 +1,4 @@
-import { GeocodeResult, SearchResult } from "../types/types";
+import { GeocodeResult, SearchResult } from "../types/mapTypes";
 
 export const geocodeAddress = async (address: string): Promise<GeocodeResult> => {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;

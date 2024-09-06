@@ -1,5 +1,5 @@
 import L, { Icon, point, Point, DivIcon, MarkerCluster } from "leaflet";
-import { IconOption } from "../types/types";
+import { IconOption } from "../types/mapTypes";
 
 // Créer une icône personnalisée
 export const abIcon: Icon = new Icon<IconOption>({

@@ -1,5 +1,5 @@
 import { FaUserCircle } from "react-icons/fa";
-import { AvatarProps } from "../../types/types";
+import { AvatarProps } from "../../types/uiTypes";
 
 export default function Avatar({ toggleDropdown }: AvatarProps): JSX.Element {
   return (

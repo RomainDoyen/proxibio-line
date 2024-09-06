@@ -1,4 +1,4 @@
-import { InputProps } from '../../types/types';
+import { InputProps } from '../../types/uiTypes';
 
 export default function Input({ type, id, placeholder, value, onChange }: InputProps): JSX.Element {
   return (
