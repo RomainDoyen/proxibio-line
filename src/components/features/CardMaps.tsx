@@ -6,6 +6,7 @@ import { supabase } from "../../config/index";
 import { CardMapsProps } from "../../types/uiTypes";
 import { ProducteurType } from "../../types/productTypes";
 import { abIcon, createClusterCustomIcon, venteDirectIcon } from "../../utils/customMarker";
+import { EnableZoomButton } from "./EnableZoomButton";
 import './CardMaps.css';
 
 export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
@@ -85,6 +86,7 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
           );
         })}
       </MarkerClusterGroup>
+      <EnableZoomButton />
     </MapContainer>
   );
 }
