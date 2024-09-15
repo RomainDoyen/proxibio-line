@@ -8,18 +8,31 @@ import { abIcon, venteDirectIcon } from '../../utils/customMarker';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import './CardForm.css';
+import { validateNameProducteur, validateNameEnterprise, validateAddress } from "../../utils/CheckForm";
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
-  // État pour les champs du formulaire
+
   const [name, setName] = useState<string>('');
   const [nameEnterprise, setNameEnterprise] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const [typeAgriculture, setTypeAgriculture] = useState<string>('ab'); // Valeur par défaut
   const [suggestions, setSuggestions] = useState<SuggestionType[]>([]);
 
+  const [nameError, setNameError] = useState<string>("");
+  const [nameEnterpriseError, setNameEnterpriseError] = useState<string>("");
+  const [addressError, setAddressError] = useState<string>("");
+  
   const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     const address = e.target.value;
     setSelectedAddress(address);
+
+    setNameError(validateNameProducteur(name));
+    setNameEnterpriseError(validateNameEnterprise(nameEnterprise));
+    setAddressError(validateAddress(selectedAddress));
+
+    if (nameError || nameEnterpriseError || addressError) {
+      return;
+    }
 
     if (address.length > 2) {
       try {
@@ -36,7 +49,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
 
   const handleAddressSelect = (address: string): void => {
     setSelectedAddress(address);
-    setSuggestions([]); // Efface les suggestions après la sélection
+    setSuggestions([]); 
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -63,7 +76,6 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
         return;
       }
 
-      // Insertion dans la table Producteur
       const { data, error } = await supabase
         .from('Producteur')
         .insert([{ name, nameEnterprise, address: selectedAddress, updatedAt }])
@@ -76,7 +88,6 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
       if (data && data.length > 0) {
         const producteurId: number = data[0].id;
 
-        // Insertion dans la table positionProducteur
         const { error: positionError } = await supabase
           .from('positionProducteur')
           .insert([{ producteurId, latitude, longitude, marker: typeAgriculture }]);
@@ -85,16 +96,14 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           throw positionError;
         }
 
-        // Appeler la fonction pour notifier que le producteur a été ajouté
         onProducteurAdded();
 
         successMessage("Producteur ajouté avec succès 🚀");
 
-        // Réinitialiser les champs du formulaire après l'ajout réussi
         setName('');
         setNameEnterprise('');
         setSelectedAddress('');
-        setTypeAgriculture('ab'); // Remettre la valeur par défaut
+        setTypeAgriculture('ab');
         setSuggestions([]);
       } else {
         throw new Error("Aucune donnée n'a été renvoyée par l'insertion du Producteur");
@@ -115,8 +124,12 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           id="name" 
           placeholder="Nom du producteur..." 
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setNameError(validateNameProducteur(name));
+          }}
         />
+        {nameError && <div className="error-message">{nameError}</div>}
       </div>
       <div className="form-group">
         <label htmlFor="address">L'adresse du producteur</label>
@@ -132,12 +145,16 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
             {suggestions.map((suggestion, index) => (
               <li 
                 key={index} 
-                onClick={() => handleAddressSelect(suggestion.display_name)}>
+                onClick={() => {
+                  handleAddressSelect(suggestion.display_name);
+                  setAddressError(validateAddress(selectedAddress));
+                }}>
                 {suggestion.display_name}
               </li>
             ))}
           </ul>
         )}
+        {addressError && <div className="error-message">{addressError}</div>}
       </div>
       <div className="form-group">
         <label htmlFor="name-enterprise">Nom de l'entreprise</label>
@@ -146,8 +163,12 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           id="name-enterprise" 
           placeholder="Nom de l'entreprise..." 
           value={nameEnterprise}
-          onChange={(e) => setNameEnterprise(e.target.value)}
+          onChange={(e) => {
+            setNameEnterprise(e.target.value);
+            setNameEnterpriseError(validateNameEnterprise(nameEnterprise));
+          }}
         />
+        {nameEnterpriseError && <div className="error-message">{nameEnterpriseError}</div>}
       </div>
       <div className="form-group">
         <label htmlFor="type-agriculture">Sélectionner le type d'agriculture</label>

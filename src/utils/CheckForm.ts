@@ -36,3 +36,27 @@ export const validateConfirmPassword = (value: string, password: string) => {
     return "";
   }
 };
+
+export const validateNameProducteur = (value: string) => {
+  if (value === "") {
+    return "Le nom du producteur est requis";
+  } else {
+    return "";
+  }
+}
+
+export const validateNameEnterprise = (value: string) => {
+  if (value === "") {
+    return "Le nom de l'entreprise est requis";
+  } else {
+    return "";
+  }
+};
+
+export const validateAddress = (value: string) => {
+  if (value === "") {
+    return "L'adresse est requise";
+  } else {
+    return "";
+  }
+};
