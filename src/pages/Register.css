@@ -91,3 +91,13 @@ input[type="email"], input[type="password"], input[type="text"] {
   font-size: 14px;
   margin-top: 10px;
 }
+
+.valid-icon {
+  position: absolute;
+  color: #669966;
+}
+
+.invalid-icon {
+  position: absolute;
+  color: #ff0000;
+}

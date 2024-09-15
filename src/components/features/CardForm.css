@@ -82,3 +82,19 @@ label {
   background-color: #669966;
   color: white;
 }
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.valid-icon {
+  position: absolute;
+  color: #669966;
+}
+
+.invalid-icon {
+  position: absolute;
+  color: #ff0000;
+}
