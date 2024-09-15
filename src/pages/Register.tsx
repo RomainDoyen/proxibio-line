@@ -10,6 +10,7 @@ import Button from "../components/ui/Button";
 import Loader from "../components/ui/Loader";
 import { TailSpin } from 'react-loader-spinner';
 import { validateUsername, validateEmail, validatePassword, validateConfirmPassword } from "../utils/CheckForm";
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -24,16 +25,33 @@ const Register: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string>("");
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
 
+  const [usernameValid, setUsernameValid] = useState<boolean>(false);
+  const [emailValid, setEmailValid] = useState<boolean>(false);
+  const [passwordValid, setPasswordValid] = useState<boolean>(false);
+  const [confirmPasswordValid, setConfirmPasswordValid] = useState<boolean>(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingStatus(true);
 
-    setUsernameError(validateUsername(username));
-    setEmailError(validateEmail(email));
-    setPasswordError(validatePassword(password));
-    setConfirmPasswordError(validateConfirmPassword(confirmPassword, password));
+    const usernameValidation = validateUsername(username);
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
+    const confirmPasswordValidation = validateConfirmPassword(confirmPassword, password);
 
-    if (usernameError || emailError || passwordError || confirmPasswordError) {
+    setUsernameError(usernameValidation.error);
+    setUsernameValid(usernameValidation.isValid);
+    
+    setEmailError(emailValidation.error);
+    setEmailValid(emailValidation.isValid);
+    
+    setPasswordError(passwordValidation.error);
+    setPasswordValid(passwordValidation.isValid);
+    
+    setConfirmPasswordError(confirmPasswordValidation.error);
+    setConfirmPasswordValid(confirmPasswordValidation.isValid);
+
+    if (!usernameValidation.isValid || !emailValidation.isValid || !passwordValidation.isValid || !confirmPasswordValidation.isValid) {
       setLoadingStatus(false);
       return;
     }
@@ -69,11 +87,15 @@ const Register: React.FC = () => {
             value={username}
             onChange={(e) => {
               setUsername(e.target.value);
-              setUsernameError(validateUsername(e.target.value));
+              const validation = validateUsername(e.target.value);
+              setUsernameError(validation.error);
+              setUsernameValid(validation.isValid);
             }}
           />
           {usernameError && <div className="error-message">{usernameError}</div>}
+          {username && (usernameValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
         </div>
+        
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <Input 
@@ -83,11 +105,15 @@ const Register: React.FC = () => {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              setEmailError(validateEmail(e.target.value));
+              const validation = validateEmail(e.target.value);
+              setEmailError(validation.error);
+              setEmailValid(validation.isValid);
             }}
           />
           {emailError && <div className="error-message">{emailError}</div>}
+          {email && (emailValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
         </div>
+        
         <div className="form-group">
           <label htmlFor="password">Mot de passe:</label>
           <Input 
@@ -97,11 +123,15 @@ const Register: React.FC = () => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              setPasswordError(validatePassword(e.target.value));
+              const validation = validatePassword(e.target.value);
+              setPasswordError(validation.error);
+              setPasswordValid(validation.isValid);
             }}
           />
           {passwordError && <div className="error-message">{passwordError}</div>}
+          {password && (passwordValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
         </div>
+        
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirmer le mot de passe:</label>
           <Input 
@@ -111,11 +141,15 @@ const Register: React.FC = () => {
             value={confirmPassword}
             onChange={(e) => {
               setConfirmPassword(e.target.value);
-              setConfirmPasswordError(validateConfirmPassword(e.target.value, password));
+              const validation = validateConfirmPassword(e.target.value, password);
+              setConfirmPasswordError(validation.error);
+              setConfirmPasswordValid(validation.isValid);
             }}
           />
           {confirmPasswordError && <div className="error-message">{confirmPasswordError}</div>}
+          {confirmPassword && (confirmPasswordValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
         </div>
+        
         <Button 
           type="submit"
           text={loadingStatus ? <Loader 

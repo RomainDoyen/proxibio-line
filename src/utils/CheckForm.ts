@@ -1,40 +1,36 @@
 export const validateUsername = (value: string) => {
   if (value === "") {
-    return "Le nom d'utilisateur est requis.";
-  } else {
-    return "";
+    return { error: "Le nom d'utilisateur est requis.", isValid: false };
   }
+  return { error: "", isValid: true };
 };
 
 export const validateEmail = (value: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (value === "") {
-    return "L'email est requis.";
+    return { error: "L'email est requis.", isValid: false };
   } else if (!emailRegex.test(value)) {
-    return "L'email n'est pas valide.";
-  } else {
-    return "";
+    return { error: "L'email n'est pas valide.", isValid: false };
   }
+  return { error: "", isValid: true };
 };
 
 export const validatePassword = (value: string) => {
   if (value === "") {
-    return "Le mot de passe est requis.";
+    return { error: "Le mot de passe est requis.", isValid: false };
   } else if (value.length < 8) {
-    return "Le mot de passe doit contenir au moins 8 caractères.";
-  } else {
-    return "";
+    return { error: "Le mot de passe doit contenir au moins 8 caractères.", isValid: false };
   }
+  return { error: "", isValid: true };
 };
 
 export const validateConfirmPassword = (value: string, password: string) => {
   if (value === "") {
-    return "La confirmation du mot de passe est requise.";
+    return { error: "La confirmation du mot de passe est requise.", isValid: false };
   } else if (value !== password) {
-    return "Les mots de passe ne correspondent pas.";
-  } else {
-    return "";
+    return { error: "Les mots de passe ne correspondent pas.", isValid: false };
   }
+  return { error: "", isValid: true };
 };
 
 export const validateNameProducteur = (value: string) => {

@@ -15,7 +15,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
   const [name, setName] = useState<string>('');
   const [nameEnterprise, setNameEnterprise] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<string>('');
-  const [typeAgriculture, setTypeAgriculture] = useState<string>('ab'); // Valeur par défaut
+  const [typeAgriculture, setTypeAgriculture] = useState<string>('ab');
   const [suggestions, setSuggestions] = useState<SuggestionType[]>([]);
 
   const [nameError, setNameError] = useState<string>("");
