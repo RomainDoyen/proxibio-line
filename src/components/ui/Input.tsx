@@ -9,7 +9,6 @@ export default function Input({ type, id, placeholder, value, onChange }: InputP
           placeholder={placeholder} 
           value={value}
           onChange={onChange}
-          required 
     />
   )
 }

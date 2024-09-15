@@ -9,6 +9,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Loader from "../components/ui/Loader";
 import { TailSpin } from 'react-loader-spinner';
+import { validateUsername, validateEmail, validatePassword, validateConfirmPassword } from "../utils/CheckForm";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -18,35 +19,27 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
 
+  const [usernameError, setUsernameError] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoadingStatus(true)
     e.preventDefault();
+    setLoadingStatus(true);
+
+    setUsernameError(validateUsername(username));
+    setEmailError(validateEmail(email));
+    setPasswordError(validatePassword(password));
+    setConfirmPasswordError(validateConfirmPassword(confirmPassword, password));
+
+    if (usernameError || emailError || passwordError || confirmPasswordError) {
+      setLoadingStatus(false);
+      return;
+    }
+
     try {
-      // Call Appwrite function to handle user registration
-      if (password !== confirmPassword) {
-        errorMessage("Les mots de passe ne correspondent pas");
-        setLoadingStatus(false)
-        return;
-      }
-      if (
-        username === "" ||
-        email === "" ||
-        password === "" ||
-        confirmPassword === ""
-      ) {
-        errorMessage("Veuillez remplir tous les champs");
-        setLoadingStatus(false);
-        return;
-      }
-
-      if (password.length < 8) {
-        errorMessage("Le mot de passe doit contenir 8 caractères");
-        setLoadingStatus(false);
-        return;
-      }
-
       const promise = account.create(ID.unique(), email, password, username) as Promise<Models.User<Models.Preferences>>;
-
       promise.then(
         function (response: Models.User<Models.Preferences>) {
           console.log(response); // Success
@@ -74,8 +67,12 @@ const Register: React.FC = () => {
             id="username" 
             placeholder="Nom d'utilisateur..." 
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setUsernameError(validateUsername(e.target.value));
+            }}
           />
+          {usernameError && <div className="error-message">{usernameError}</div>}
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
@@ -84,8 +81,12 @@ const Register: React.FC = () => {
             id="email" 
             placeholder="Email..." 
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailError(validateEmail(e.target.value));
+            }}
           />
+          {emailError && <div className="error-message">{emailError}</div>}
         </div>
         <div className="form-group">
           <label htmlFor="password">Mot de passe:</label>
@@ -94,8 +95,12 @@ const Register: React.FC = () => {
             id="password" 
             placeholder="Mot de passe..." 
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError(validatePassword(e.target.value));
+            }}
           />
+          {passwordError && <div className="error-message">{passwordError}</div>}
         </div>
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirmer le mot de passe:</label>
@@ -104,8 +109,12 @@ const Register: React.FC = () => {
             id="confirmPassword" 
             placeholder="Confirmer le mot de passe..." 
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+              setConfirmPasswordError(validateConfirmPassword(e.target.value, password));
+            }}
           />
+          {confirmPasswordError && <div className="error-message">{confirmPasswordError}</div>}
         </div>
         <Button 
           type="submit"
