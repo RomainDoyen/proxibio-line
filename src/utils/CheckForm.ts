@@ -1,6 +1,6 @@
 export const validateUsername = (value: string) => {
   if (value === "") {
-    return "Le nom d'utilisateur est requis";
+    return "Le nom d'utilisateur est requis.";
   } else {
     return "";
   }
@@ -9,9 +9,9 @@ export const validateUsername = (value: string) => {
 export const validateEmail = (value: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (value === "") {
-    return "L'email est requis";
+    return "L'email est requis.";
   } else if (!emailRegex.test(value)) {
-    return "L'email n'est pas valide";
+    return "L'email n'est pas valide.";
   } else {
     return "";
   }
@@ -19,9 +19,9 @@ export const validateEmail = (value: string) => {
 
 export const validatePassword = (value: string) => {
   if (value === "") {
-    return "Le mot de passe est requis";
+    return "Le mot de passe est requis.";
   } else if (value.length < 8) {
-    return "Le mot de passe doit contenir au moins 8 caractères";
+    return "Le mot de passe doit contenir au moins 8 caractères.";
   } else {
     return "";
   }
@@ -29,9 +29,9 @@ export const validatePassword = (value: string) => {
 
 export const validateConfirmPassword = (value: string, password: string) => {
   if (value === "") {
-    return "La confirmation du mot de passe est requise";
+    return "La confirmation du mot de passe est requise.";
   } else if (value !== password) {
-    return "Les mots de passe ne correspondent pas";
+    return "Les mots de passe ne correspondent pas.";
   } else {
     return "";
   }
@@ -39,7 +39,7 @@ export const validateConfirmPassword = (value: string, password: string) => {
 
 export const validateNameProducteur = (value: string) => {
   if (value === "") {
-    return "Le nom du producteur est requis";
+    return "Le nom du producteur est requis.";
   } else {
     return "";
   }
@@ -47,7 +47,7 @@ export const validateNameProducteur = (value: string) => {
 
 export const validateNameEnterprise = (value: string) => {
   if (value === "") {
-    return "Le nom de l'entreprise est requis";
+    return "Le nom de l'entreprise est requis.";
   } else {
     return "";
   }
@@ -55,7 +55,7 @@ export const validateNameEnterprise = (value: string) => {
 
 export const validateAddress = (value: string) => {
   if (value === "") {
-    return "L'adresse est requise";
+    return "L'adresse est requise.";
   } else {
     return "";
   }

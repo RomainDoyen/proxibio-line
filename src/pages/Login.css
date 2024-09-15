@@ -85,3 +85,9 @@ input[type="email"], input[type="password"], input[type="text"] {
 .reg a {
   color: #669966;
 }
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 10px;
+}
