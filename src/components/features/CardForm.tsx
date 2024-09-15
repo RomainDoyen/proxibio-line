@@ -9,6 +9,7 @@ import Input from '../ui/Input';
 import Button from '../ui/Button';
 import './CardForm.css';
 import { validateNameProducteur, validateNameEnterprise, validateAddress } from "../../utils/CheckForm";
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
 
@@ -21,16 +22,29 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
   const [nameError, setNameError] = useState<string>("");
   const [nameEnterpriseError, setNameEnterpriseError] = useState<string>("");
   const [addressError, setAddressError] = useState<string>("");
-  
+
+  const [userProducteurValid, setUserProducteurValid] = useState<boolean>(false);
+  const [userEnterpriseValid, setUserEnterpriseValid] = useState<boolean>(false);
+  const [userAddressValid, setUserAddressValid] = useState<boolean>(false);
+
   const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     const address = e.target.value;
     setSelectedAddress(address);
 
-    setNameError(validateNameProducteur(name));
-    setNameEnterpriseError(validateNameEnterprise(nameEnterprise));
-    setAddressError(validateAddress(selectedAddress));
+    const userProducteurValidation = validateNameProducteur(name);
+    const userEnterpriseValidation = validateNameEnterprise(nameEnterprise);
+    const userAddressValidation = validateAddress(selectedAddress);
 
-    if (nameError || nameEnterpriseError || addressError) {
+    setNameError(userProducteurValidation.error);
+    setUserProducteurValid(userProducteurValidation.isValid);
+    
+    setNameEnterpriseError(userEnterpriseValidation.error);
+    setUserEnterpriseValid(userEnterpriseValidation.isValid);
+
+    setAddressError(userAddressValidation.error);
+    setUserAddressValid(userAddressValidation.isValid);
+
+    if (!userProducteurValidation.isValid || !userEnterpriseValidation.isValid || !userAddressValidation.isValid) {
       return;
     }
 
@@ -126,10 +140,13 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           value={name}
           onChange={(e) => {
             setName(e.target.value);
-            setNameError(validateNameProducteur(name));
+            const validation = validateNameProducteur(e.target.value);
+            setNameError(validation.error);
+            setUserProducteurValid(validation.isValid);
           }}
         />
         {nameError && <div className="error-message">{nameError}</div>}
+        {name && (userProducteurValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
       </div>
       <div className="form-group">
         <label htmlFor="address">L'adresse du producteur</label>
@@ -147,7 +164,9 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
                 key={index} 
                 onClick={() => {
                   handleAddressSelect(suggestion.display_name);
-                  setAddressError(validateAddress(selectedAddress));
+                  const validation = validateAddress(selectedAddress);
+                  setAddressError(validation.error);
+                  setUserAddressValid(validation.isValid);
                 }}>
                 {suggestion.display_name}
               </li>
@@ -155,6 +174,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           </ul>
         )}
         {addressError && <div className="error-message">{addressError}</div>}
+        {selectedAddress && (userAddressValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
       </div>
       <div className="form-group">
         <label htmlFor="name-enterprise">Nom de l'entreprise</label>
@@ -165,10 +185,13 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           value={nameEnterprise}
           onChange={(e) => {
             setNameEnterprise(e.target.value);
-            setNameEnterpriseError(validateNameEnterprise(nameEnterprise));
+            const validation = validateNameEnterprise(e.target.value);
+            setNameEnterpriseError(validation.error);
+            setUserEnterpriseValid(validation.isValid);
           }}
         />
         {nameEnterpriseError && <div className="error-message">{nameEnterpriseError}</div>}
+        {nameEnterprise && (userEnterpriseValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
       </div>
       <div className="form-group">
         <label htmlFor="type-agriculture">Sélectionner le type d'agriculture</label>

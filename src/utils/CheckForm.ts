@@ -35,7 +35,7 @@ export const validateConfirmPassword = (value: string, password: string) => {
 
 export const validateNameProducteur = (value: string) => {
   if (value === "") {
-    return { error: "Le nom du producteur est requis.", isValide: false };
+    return { error: "Le nom du producteur est requis.", isValid: false };
   } else {
     return { error: "", isValid: true };
   }
