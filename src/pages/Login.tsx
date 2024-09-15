@@ -11,6 +11,7 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Loader from "../components/ui/Loader";
 import { TailSpin } from 'react-loader-spinner';
+import { validateEmail, validatePassword } from "../utils/CheckForm";
 
 const Login: React.FC = () => {
   const { setUser, user } = useContext(UserAuthContext) as UserAuthContextType;
@@ -19,6 +20,9 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
 
   useEffect(() => {
     if(user !== null){
@@ -30,16 +34,16 @@ const Login: React.FC = () => {
     e.preventDefault();
     setButtonLoading(true);
 
-    if (password === "" || email === "") {
-      errorMessage("Veuillez remplir le champ requis");
+    setEmailError(validateEmail(email));
+    setPasswordError(validatePassword(password));
+
+    if (emailError || passwordError) {
       setButtonLoading(false);
       return;
     }
 
     try {
       const session: Models.Session = await account.createEmailPasswordSession(email, password);
-
-      // Extraire les données utilisateur pertinentes de la session
       const userFromSession = {
         // name: session.clientName || "Nom inconnu",
         email: session.providerUid || "Email inconnu",
@@ -48,7 +52,6 @@ const Login: React.FC = () => {
 
       successMessage("Connexion réussie 🚀");
 
-      // Mettre à jour l'utilisateur avec les informations extraites
       setUser(userFromSession);
       navigate("/");
     } catch (error) {
@@ -70,8 +73,12 @@ const Login: React.FC = () => {
             id="email" 
             placeholder="Email..." 
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              setEmailError(validateEmail(e.target.value));
+            }}
           />
+          {emailError && <div className="error-message">{emailError}</div>}
         </div>
         <div className="form-group">
           <label htmlFor="password">Mot de passe:</label>
@@ -80,8 +87,12 @@ const Login: React.FC = () => {
             id="password" 
             placeholder="Mot de passe..." 
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError(validatePassword(e.target.value));
+            }}
           />
+          {passwordError && <div className="error-message">{passwordError}</div>}
         </div>
         <Button 
           type="submit"
