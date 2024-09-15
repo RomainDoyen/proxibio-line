@@ -12,6 +12,7 @@ import Input from "../components/ui/Input";
 import Loader from "../components/ui/Loader";
 import { TailSpin } from 'react-loader-spinner';
 import { validateEmail, validatePassword } from "../utils/CheckForm";
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 const Login: React.FC = () => {
   const { setUser, user } = useContext(UserAuthContext) as UserAuthContextType;
@@ -24,6 +25,9 @@ const Login: React.FC = () => {
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
 
+  const [emailValid, setEmailValid] = useState<boolean>(false);
+  const [passwordValid, setPasswordValid] = useState<boolean>(false);
+
   useEffect(() => {
     if(user !== null){
        navigate("/");
@@ -34,10 +38,16 @@ const Login: React.FC = () => {
     e.preventDefault();
     setButtonLoading(true);
 
-    setEmailError(validateEmail(email));
-    setPasswordError(validatePassword(password));
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
 
-    if (emailError || passwordError) {
+    setEmailError(emailValidation.error);
+    setEmailValid(emailValidation.isValid);
+
+    setPasswordError(passwordValidation.error);
+    setPasswordValid(passwordValidation.isValid);
+
+    if (!emailValidation.isValid || !passwordValidation.isValid) {
       setButtonLoading(false);
       return;
     }
@@ -75,10 +85,13 @@ const Login: React.FC = () => {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
-              setEmailError(validateEmail(e.target.value));
+              const validation = validateEmail(e.target.value);
+              setEmailError(validation.error);
+              setEmailValid(validation.isValid);
             }}
           />
           {emailError && <div className="error-message">{emailError}</div>}
+          {emailValid && (emailValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}
         </div>
         <div className="form-group">
           <label htmlFor="password">Mot de passe:</label>
@@ -89,10 +102,13 @@ const Login: React.FC = () => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              setPasswordError(validatePassword(e.target.value));
+              const validation = validatePassword(e.target.value);
+              setPasswordError(validation.error);
+              setPasswordValid(validation.isValid);
             }}
           />
           {passwordError && <div className="error-message">{passwordError}</div>}
+          {passwordValid && (passwordValid ? <FaCheckCircle className="valid-icon" /> : <FaTimesCircle className="invalid-icon" />)}        
         </div>
         <Button 
           type="submit"

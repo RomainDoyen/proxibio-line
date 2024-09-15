@@ -35,24 +35,24 @@ export const validateConfirmPassword = (value: string, password: string) => {
 
 export const validateNameProducteur = (value: string) => {
   if (value === "") {
-    return "Le nom du producteur est requis.";
+    return { error: "Le nom du producteur est requis.", isValide: false };
   } else {
-    return "";
+    return { error: "", isValid: true };
   }
 }
 
 export const validateNameEnterprise = (value: string) => {
   if (value === "") {
-    return "Le nom de l'entreprise est requis.";
+    return { error: "Le nom de l'entreprise est requis.", isValid: false };
   } else {
-    return "";
+    return { error: "", isValid: true };
   }
 };
 
 export const validateAddress = (value: string) => {
   if (value === "") {
-    return "L'adresse est requise.";
+    return { error: "L'adresse est requise.", isValid: false };
   } else {
-    return "";
+    return { error: "", isValid: true };
   }
 };
