@@ -10,6 +10,7 @@ import "./Navbar.css";
 import Image from "../ui/Image";
 import Button from "../ui/Button";
 import { apiUrl } from "../../utils/apiUrl";
+import brandLogo from "../../assets/ab.png";
 
 const Navbar: React.FC = () => {
   const { user, setUser, isLoading } = useContext(UserAuthContext) as UserAuthContextType;
@@ -95,7 +96,7 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={homeHref} className="navbar-brand" onClick={closeMenu}>
-          <Image src="./src/assets/ab.png" alt="" className="navbar-brand-logo" />
+          <Image src={brandLogo} alt="" className="navbar-brand-logo" />
           <span>ProxiBioLine</span>
         </Link>
 

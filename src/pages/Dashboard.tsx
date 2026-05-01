@@ -17,7 +17,11 @@ const Dashboard: React.FC = () => {
     <div className="dashboard-container">
       <div className="dashboard-form-column" id="add-producer">
         <CardForm onProducteurAdded={handleProducteurAdded} />
-        <Image src="./src/assets/loca.PNG" alt="Instructions pour ajouter un producteur" className="instruction-img" />
+        <Image
+          src={`${import.meta.env.BASE_URL}loca.png`}
+          alt="Instructions pour ajouter un producteur"
+          className="instruction-img"
+        />
       </div>
       <div className="dashboard-map-column">
         <CardInfos />

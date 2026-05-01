@@ -19,6 +19,15 @@ import { sanitizeProducerProfileBody } from './producerProfilePayload';
 const app = express();
 const port = Number(process.env.PORT || process.env.API_PORT) || 3001;
 
+if (!process.env.JWT_SECRET?.trim()) {
+  console.warn(
+    '[proxibio] JWT_SECRET est absent ou vide : /api/auth/login et /api/auth/register échoueront après succès mot de passe (500). Définis JWT_SECRET sur Railway.'
+  );
+}
+if (!process.env.DATABASE_URL?.trim()) {
+  console.warn('[proxibio] DATABASE_URL est absent : Prisma ne pourra pas joindre la base.');
+}
+
 const corsRaw = process.env.CORS_ORIGIN?.trim();
 const corsOrigins = (
   corsRaw ? corsRaw.split(',') : ['http://localhost:5173']
@@ -132,7 +141,7 @@ app.post('/api/auth/register', async (req, res) => {
     res.cookie(SESSION_COOKIE, token, sessionCookieOptions());
     res.status(201).json(publicUser(user));
   } catch (err) {
-    console.error(err);
+    console.error('[auth/register]', err);
     res.status(500).json({ error: 'inscription_échouée' });
   }
 });
@@ -162,7 +171,7 @@ app.post('/api/auth/login', async (req, res) => {
     res.cookie(SESSION_COOKIE, token, sessionCookieOptions());
     res.json(publicUser(user));
   } catch (err) {
-    console.error(err);
+    console.error('[auth/login]', err);
     res.status(500).json({ error: 'connexion_échouée' });
   }
 });

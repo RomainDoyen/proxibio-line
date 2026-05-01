@@ -4,6 +4,12 @@ import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { UserProvider } from "./context/UserAuthContext.jsx";
+import favicon from "./assets/ab.png";
+
+const iconLink = document.querySelector<HTMLLinkElement>("link[rel='icon']");
+if (iconLink) {
+  iconLink.href = favicon;
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

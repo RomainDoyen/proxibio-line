@@ -1,7 +1,9 @@
 import L, { point, Point, DivIcon, MarkerCluster } from "leaflet";
+import abUrl from "../assets/ab.png?url";
+import vdUrl from "../assets/vente-direct.png?url";
 
-const AB_IMG = "./src/assets/ab.png";
-const VD_IMG = "./src/assets/vente-direct.png";
+const AB_IMG = abUrl;
+const VD_IMG = vdUrl;
 
 const PIN_W = 46;
 const PIN_H = 54;
