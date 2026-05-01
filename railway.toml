@@ -1,0 +1,10 @@
+# Évite que Railpack lance le front (vite preview) : ce service est uniquement l’API Express.
+# https://docs.railway.app/reference/config-as-code
+
+[build]
+builder = "RAILPACK"
+buildCommand = "npm install && npx prisma generate"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/health"

@@ -36,6 +36,11 @@ app.use(
 app.use(cookieParser());
 app.use(express.json({ limit: '2mb' }));
 
+/** Santé du service (Railway healthcheck, debug rapide dans le navigateur) */
+app.get('/api/health', (_req, res) => {
+  res.status(200).json({ ok: true });
+});
+
 function publicUser(u: { id: string; email: string; name: string; role: Role }) {
   return { id: u.id, email: u.email, name: u.name, role: u.role };
 }
