@@ -15,6 +15,7 @@ import {
   emptyProducerProfileFormState,
   type ProducerProfileFormState,
 } from '../../utils/producerProfileFormState';
+import { apiUrl } from '../../utils/apiUrl';
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
   const { user } = useContext(UserAuthContext) as UserAuthContextType;
@@ -103,7 +104,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
           }
         : basePayload;
 
-      const res = await fetch('/api/producteurs', {
+      const res = await fetch(apiUrl('/api/producteurs'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

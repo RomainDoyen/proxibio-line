@@ -3,6 +3,7 @@ import { errorMessage, successMessage } from "../utils/customToast";
 import type { UserRole } from "../types/userTypes";
 import type { ContributionStatus, ProducteurType } from "../types/productTypes";
 import { EditProducerForm } from "../components/features/EditProducerForm";
+import { apiUrl } from "../utils/apiUrl";
 import "./Admin.css";
 
 type AdminUserRow = {
@@ -43,7 +44,7 @@ const STATUSES: ContributionStatus[] = ["APPROVED", "PENDING", "REJECTED"];
 function downloadCsv(path: string, filename: string) {
   void (async () => {
     try {
-      const res = await fetch(path, { credentials: "include" });
+      const res = await fetch(apiUrl(path), { credentials: "include" });
       if (!res.ok) {
         errorMessage("Export impossible");
         return;
@@ -103,10 +104,10 @@ export default function Admin(): JSX.Element {
     setLoading(true);
     try {
       const [uRes, pRes, sRes, dRes] = await Promise.all([
-        fetch("/api/admin/users", { credentials: "include" }),
-        fetch("/api/admin/producteurs", { credentials: "include" }),
-        fetch("/api/admin/stats", { credentials: "include" }),
-        fetch("/api/admin/duplicates", { credentials: "include" }),
+        fetch(apiUrl("/api/admin/users"), { credentials: "include" }),
+        fetch(apiUrl("/api/admin/producteurs"), { credentials: "include" }),
+        fetch(apiUrl("/api/admin/stats"), { credentials: "include" }),
+        fetch(apiUrl("/api/admin/duplicates"), { credentials: "include" }),
       ]);
       if (!uRes.ok || !pRes.ok || !sRes.ok || !dRes.ok) {
         throw new Error("chargement");
@@ -139,7 +140,7 @@ export default function Admin(): JSX.Element {
 
   const changeRole = async (userId: string, role: UserRole) => {
     try {
-      const res = await fetch(`/api/admin/users/${userId}/role`, {
+      const res = await fetch(apiUrl(`/api/admin/users/${userId}/role`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -170,7 +171,7 @@ export default function Admin(): JSX.Element {
       return;
     }
     try {
-      const res = await fetch(`/api/admin/users/${userId}/password`, {
+      const res = await fetch(apiUrl(`/api/admin/users/${userId}/password`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -188,7 +189,7 @@ export default function Admin(): JSX.Element {
 
   const changeProducteurStatus = async (id: number, status: ContributionStatus) => {
     try {
-      const res = await fetch(`/api/admin/producteurs/${id}/status`, {
+      const res = await fetch(apiUrl(`/api/admin/producteurs/${id}/status`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -209,7 +210,7 @@ export default function Admin(): JSX.Element {
   const removeProducteur = async (id: number) => {
     if (!window.confirm("Supprimer ce producteur de la carte ?")) return;
     try {
-      const res = await fetch(`/api/producteurs/${id}`, {
+      const res = await fetch(apiUrl(`/api/producteurs/${id}`), {
         method: "DELETE",
         credentials: "include",
       });
@@ -235,7 +236,7 @@ export default function Admin(): JSX.Element {
       return;
     }
     try {
-      const res = await fetch("/api/admin/producteurs/merge", {
+      const res = await fetch(apiUrl("/api/admin/producteurs/merge"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

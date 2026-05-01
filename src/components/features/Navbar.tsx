@@ -9,6 +9,7 @@ import Avatar from "../ui/Avatar";
 import "./Navbar.css";
 import Image from "../ui/Image";
 import Button from "../ui/Button";
+import { apiUrl } from "../../utils/apiUrl";
 
 const Navbar: React.FC = () => {
   const { user, setUser, isLoading } = useContext(UserAuthContext) as UserAuthContextType;
@@ -27,7 +28,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      await fetch(apiUrl("/api/auth/logout"), { method: "POST", credentials: "include" });
       setUser(null);
       localStorage.removeItem("isLoggedIn");
       successMessage("Déconnecté avec succès 🚀");

@@ -9,6 +9,7 @@ import { TailSpin } from 'react-loader-spinner';
 import { validateUsername, validateEmail, validatePassword, validateConfirmPassword } from "../utils/CheckForm";
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { UserAuthContext } from "../context/UserAuthContext";
+import { apiUrl } from "../utils/apiUrl";
 import { UserAuthContextType } from "../types/userTypes";
 
 const Register: React.FC = () => {
@@ -57,7 +58,7 @@ const Register: React.FC = () => {
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(apiUrl("/api/auth/register"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

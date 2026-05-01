@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { User, UserAuthContextType, UserProviderProps } from "../types/userTypes";
+import { apiUrl } from "../utils/apiUrl";
 
 export const UserAuthContext = createContext<UserAuthContextType | undefined>(undefined);
 
@@ -9,7 +10,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const fetchUserData = async () => {
     try {
-      const res = await fetch("/api/auth/me", { credentials: "include" });
+      const res = await fetch(apiUrl("/api/auth/me"), { credentials: "include" });
       if (res.status === 401) {
         setUser(null);
         return;

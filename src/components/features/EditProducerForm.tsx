@@ -10,6 +10,7 @@ import {
   profileStateFromProducteur,
   type ProducerProfileFormState,
 } from "../../utils/producerProfileFormState";
+import { apiUrl } from "../../utils/apiUrl";
 import "./EditProducerForm.css";
 
 export type EditProducerFormProps = {
@@ -62,7 +63,7 @@ export function EditProducerForm({
     setSubmitting(true);
     try {
       const { latitude, longitude } = await geocodeAddress(address);
-      const res = await fetch(`/api/producteurs/${producteur.id}`, {
+      const res = await fetch(apiUrl(`/api/producteurs/${producteur.id}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -11,6 +11,7 @@ import { TailSpin } from 'react-loader-spinner';
 import { validateEmail, validatePassword } from "../utils/CheckForm";
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { postLoginPath } from "../utils/postLoginPath";
+import { apiUrl } from "../utils/apiUrl";
 
 const Login: React.FC = () => {
   const { setUser, user } = useContext(UserAuthContext) as UserAuthContextType;
@@ -50,7 +51,7 @@ const Login: React.FC = () => {
     }
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(apiUrl("/api/auth/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

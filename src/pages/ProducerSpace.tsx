@@ -4,6 +4,7 @@ import type { ProducteurType } from "../types/productTypes";
 import Button from "../components/ui/Button";
 import "./ProducerSpace.css";
 import { EditProducerForm } from "../components/features/EditProducerForm";
+import { apiUrl } from "../utils/apiUrl";
 
 export default function ProducerSpace(): JSX.Element {
   const [items, setItems] = useState<ProducteurType[]>([]);
@@ -13,7 +14,7 @@ export default function ProducerSpace(): JSX.Element {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/producteurs/mine", { credentials: "include" });
+      const res = await fetch(apiUrl("/api/producteurs/mine"), { credentials: "include" });
       if (!res.ok) {
         throw new Error("load");
       }
@@ -39,7 +40,7 @@ export default function ProducerSpace(): JSX.Element {
       return;
     }
     try {
-      const res = await fetch(`/api/producteurs/${p.id}`, {
+      const res = await fetch(apiUrl(`/api/producteurs/${p.id}`), {
         method: "DELETE",
         credentials: "include",
       });

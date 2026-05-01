@@ -7,6 +7,7 @@ import { ProducteurType } from "../../types/productTypes";
 import { createClusterCustomIcon, createProducerMarkerIcon } from "../../utils/customMarker";
 import { EnableZoomButton } from "./EnableZoomButton";
 import { MapProducerPopup } from "./MapProducerPopup";
+import { apiUrl } from "../../utils/apiUrl";
 import './CardMaps.css';
 
 export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
@@ -14,7 +15,7 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
 
   const fetchProducteurs = async (): Promise<void> => {
     try {
-      const res = await fetch('/api/producteurs');
+      const res = await fetch(apiUrl('/api/producteurs'));
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }

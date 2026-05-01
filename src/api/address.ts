@@ -1,8 +1,9 @@
 import { GeocodeResult, SearchResult } from "../types/mapTypes";
+import { apiUrl } from "../utils/apiUrl";
 
 async function fetchPlaces(address: string, limit: number): Promise<SearchResult[]> {
   const res = await fetch(
-    `/api/places/search?q=${encodeURIComponent(address)}&limit=${limit}`
+    apiUrl(`/api/places/search?q=${encodeURIComponent(address)}&limit=${limit}`)
   );
   if (!res.ok) {
     throw new Error(`Geocoding HTTP ${res.status}`);

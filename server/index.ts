@@ -7,6 +7,7 @@ import { prisma } from './db';
 import {
   hashPassword,
   SESSION_COOKIE,
+  sessionClearCookieOptions,
   sessionCookieOptions,
   signSessionToken,
   verifyPassword,
@@ -16,11 +17,19 @@ import { getAuthUser } from './session';
 import { sanitizeProducerProfileBody } from './producerProfilePayload';
 
 const app = express();
-const port = Number(process.env.API_PORT) || 3001;
+const port = Number(process.env.PORT || process.env.API_PORT) || 3001;
+
+const corsRaw = process.env.CORS_ORIGIN?.trim();
+const corsOrigins = (
+  corsRaw ? corsRaw.split(',') : ['http://localhost:5173']
+)
+  .map((s) => s.trim())
+  .filter(Boolean);
+const corsList = corsOrigins.length > 0 ? corsOrigins : ['http://localhost:5173'];
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: corsList.length === 1 ? corsList[0] : corsList,
     credentials: true,
   })
 );
@@ -154,7 +163,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.post('/api/auth/logout', (_req, res) => {
-  res.clearCookie(SESSION_COOKIE, { path: '/', httpOnly: true, sameSite: 'lax' });
+  res.clearCookie(SESSION_COOKIE, sessionClearCookieOptions());
   res.status(204).end();
 });
 
@@ -786,6 +795,6 @@ app.get('/api/admin/export/users.csv', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`API Prisma/Neon sur http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`API sur le port ${port}`);
 });

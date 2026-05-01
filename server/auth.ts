@@ -21,17 +21,21 @@ export function verifySessionToken(token: string): { sub: string } {
 
 export function sessionCookieOptions(): {
   httpOnly: boolean;
-  sameSite: 'lax';
+  sameSite: 'lax' | 'none';
   path: string;
   maxAge: number;
   secure: boolean;
 } {
+  const cross =
+    process.env.CROSS_ORIGIN_COOKIES === '1' ||
+    process.env.CROSS_ORIGIN_COOKIES === 'true';
+  const secure = cross || process.env.NODE_ENV === 'production';
   return {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: cross ? 'none' : 'lax',
     path: '/',
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === 'production',
+    secure,
   };
 }
 
@@ -41,4 +45,15 @@ export async function hashPassword(plain: string): Promise<string> {
 
 export async function verifyPassword(plain: string, hash: string): Promise<boolean> {
   return bcrypt.compare(plain, hash);
+}
+
+/** Options pour `clearCookie` : doivent correspondre au cookie posé (même path / sameSite / secure). */
+export function sessionClearCookieOptions(): {
+  path: string;
+  httpOnly: boolean;
+  sameSite: 'lax' | 'none';
+  secure: boolean;
+} {
+  const o = sessionCookieOptions();
+  return { path: o.path, httpOnly: o.httpOnly, sameSite: o.sameSite, secure: o.secure };
 }
