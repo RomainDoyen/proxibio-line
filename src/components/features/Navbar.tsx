@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { successMessage } from "../../utils/customToast";
-import { Link, useNavigate } from "react-router-dom";
-import { account } from "../../config/index";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FiMenu, FiX } from "react-icons/fi";
 import { UserAuthContext } from "../../context/UserAuthContext";
 import { UserAuthContextType } from "../../types/userTypes";
 import Avatar from "../ui/Avatar";
@@ -11,18 +11,28 @@ import Image from "../ui/Image";
 import Button from "../ui/Button";
 
 const Navbar: React.FC = () => {
-  const { user, setUser } = useContext(UserAuthContext) as UserAuthContextType;
+  const { user, setUser, isLoading } = useContext(UserAuthContext) as UserAuthContextType;
   const navigate = useNavigate();
+  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   let inactivityTimeout: NodeJS.Timeout;
 
+  const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    closeMenu();
+  }, [location.pathname]);
+
   const handleLogout = async () => {
     try {
-      await account.deleteSession("current");
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
       setUser(null);
+      localStorage.removeItem("isLoggedIn");
       successMessage("Déconnecté avec succès 🚀");
-      navigate("/login");
+      navigate("/");
+      closeMenu();
     } catch (error) {
       console.error(error);
     }
@@ -31,12 +41,11 @@ const Navbar: React.FC = () => {
   const resetInactivityTimeout = () => {
     clearTimeout(inactivityTimeout);
     inactivityTimeout = setTimeout(() => {
-      handleLogout();
+      void handleLogout();
       successMessage("Déconnecté pour cause d'inactivité 🕒");
-    }, 5 * 60 * 1000); // 5 minutes d'inactivité
+    }, 5 * 60 * 1000);
   };
 
-  // Gestion de l'inactivité (mouvement de la souris, clic, touche pressée)
   useEffect(() => {
     if (user) {
       window.addEventListener("mousemove", resetInactivityTimeout);
@@ -52,7 +61,6 @@ const Navbar: React.FC = () => {
     };
   }, [user]);
 
-  // Gestion de la fermeture/rechargement de la fenêtre
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (user) {
@@ -67,47 +75,101 @@ const Navbar: React.FC = () => {
     };
   }, [user]);
 
-  // Vérifier si l'utilisateur était connecté au rechargement de la page
   useEffect(() => {
+    if (isLoading) return;
     const wasLoggedIn = localStorage.getItem("isLoggedIn");
     if (wasLoggedIn && !user) {
-      // Si l'utilisateur était marqué comme connecté mais ne l'est pas
-      handleLogout();
+      void handleLogout();
       localStorage.removeItem("isLoggedIn");
     }
-  }, [handleLogout, user]);
+  }, [handleLogout, user, isLoading]);
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen); // Inverser l'état pour ouvrir/fermer le menu
+    setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const homeHref = "/";
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-logo"> 
-          <Image src="./src/assets/ab.png" alt="Logo" />
-          <p>ProxyBioLine</p>
-        </div>
-        <div className="navbar-links">
-          <Link to="/" className="nav-link">Accueil</Link>
-          {user ? (
-            <div className="user-profile">
-              <Avatar toggleDropdown={toggleDropdown} />
-              {isDropdownOpen && (
-                <div className="user-dropdown">
-                  <p><strong>Nom:</strong> {user?.name || user?.providerUid}</p>
-                  <p><strong>Email:</strong> {user?.email || user?.providerUid}</p>
-                  <Button 
-                    text="Se déconnecter"
-                    onClick={handleLogout}
-                    className="nav-button"
-                  />
+        <Link to={homeHref} className="navbar-brand" onClick={closeMenu}>
+          <Image src="./src/assets/ab.png" alt="" className="navbar-brand-logo" />
+          <span>ProxiBioLine</span>
+        </Link>
+
+        <button
+          type="button"
+          className="navbar-burger"
+          aria-expanded={menuOpen}
+          aria-controls="navbar-panel"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+        </button>
+
+        <div
+          id="navbar-panel"
+          className={`navbar-panel ${menuOpen ? "navbar-panel--open" : ""}`}
+        >
+          <div className="navbar-links">
+            {user ? (
+              <>
+                <Link to="/" className="nav-link" onClick={closeMenu}>
+                  Accueil
+                </Link>
+                {user.role === "PRODUCER" && (
+                  <Link
+                    to="/espace-producteur"
+                    className="nav-link"
+                    onClick={closeMenu}
+                  >
+                    Espace producteur
+                  </Link>
+                )}
+                {user.role === "ADMIN" && (
+                  <Link to="/admin" className="nav-link" onClick={closeMenu}>
+                    Administration
+                  </Link>
+                )}
+                <div className="user-profile">
+                  <Avatar toggleDropdown={toggleDropdown} />
+                  {isDropdownOpen && (
+                    <div className="user-dropdown">
+                      <p>
+                        <strong>Nom :</strong> {user.name}
+                      </p>
+                      <p>
+                        <strong>Email :</strong> {user.email}
+                      </p>
+                      <Button
+                        text="Se déconnecter"
+                        onClick={() => {
+                          void handleLogout();
+                          setIsDropdownOpen(false);
+                        }}
+                        className="nav-button"
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          ) : (
-            <Avatar toggleDropdown={toggleDropdown} />
-          )}
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="nav-link" onClick={closeMenu}>
+                  Connexion
+                </Link>
+                <Link
+                  to="/register"
+                  className="nav-link nav-link--cta"
+                  onClick={closeMenu}
+                >
+                  S&apos;inscrire
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </nav>

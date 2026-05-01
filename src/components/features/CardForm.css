@@ -1,100 +1,128 @@
-form {
-  /* background-color: #333; */
-  background-color: #16283A;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #a5a5a5;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.producer-form {
+  background: var(--color-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-soft);
   width: 100%;
-  max-width: 400px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #77a577;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  max-width: 100%;
   box-sizing: border-box;
-  color: #77a577;
-  transition: border-color 0.3s ease;
 }
 
-.form-control:focus {
-  border-color: #669966;
-  outline: none;
-  box-shadow: 0 0 5px #6c9a6c;
+.producer-form .form-group {
+  position: relative;
+  margin-bottom: 1rem;
 }
 
-.btn {
-  width: 100%;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: bold;
+.producer-form label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.78rem;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+  color: var(--color-sage);
+}
+
+.producer-form .form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  color: var(--color-text);
+  background: rgba(15, 28, 45, 0.6);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.producer-form .form-control:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+.producer-form select.form-control {
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23a8b8c4' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  padding-right: 2.75rem;
 }
 
-.btn-primary {
-  background-color: #669966;
-  color: #000000;
+.producer-form .btn {
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-primary:hover {
-  background-color: #507c50;
+.producer-form .btn:active {
+  transform: scale(0.98);
 }
 
-.suggestions-list {
-  list-style-type: none;
-  margin: 0;
+.producer-form .btn-primary {
+  background: linear-gradient(135deg, var(--color-accent) 0%, #2dd4bf 100%);
+  color: var(--color-navy-deep);
+  box-shadow: 0 6px 24px rgba(94, 234, 212, 0.28);
+}
+
+.producer-form .btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%);
+}
+
+.producer-form .suggestions-list {
+  list-style: none;
+  margin: 0.35rem 0 0;
   padding: 0;
-  border: 1px solid #ddd;
-  max-height: 150px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  max-height: 180px;
   overflow-y: auto;
-  background-color: white;
+  background: rgba(15, 28, 45, 0.96);
   position: absolute;
   z-index: 1000;
-  width: 350px;
+  left: 0;
+  right: 0;
+  box-shadow: var(--shadow-elevated);
 }
 
-.suggestions-list li {
-  padding: 8px;
+.producer-form .suggestions-list li {
+  padding: 0.65rem 1rem;
   cursor: pointer;
-  border-bottom: 1px solid black;
-  background-color: #fbfbfb;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.9rem;
 }
 
-.suggestions-list li:hover {
-  background-color: #669966;
-  color: white;
+.producer-form .suggestions-list li:last-child {
+  border-bottom: none;
 }
 
-.error-message {
-  color: #ff0000;
-  font-size: 14px;
-  margin-top: 10px;
+.producer-form .suggestions-list li:hover {
+  background: var(--color-accent-dim);
+  color: var(--color-accent-hover);
 }
 
-.valid-icon {
+.producer-form .error-message {
+  color: var(--color-danger);
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
+
+.producer-form .valid-icon,
+.producer-form .invalid-icon {
   position: absolute;
-  color: #669966;
-}
-
-.invalid-icon {
-  position: absolute;
-  color: #ff0000;
+  right: 0.75rem;
+  top: 2.35rem;
+  font-size: 0.95rem;
 }

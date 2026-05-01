@@ -1,0 +1,7 @@
+.home-gate-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: min(45vh, 360px);
+  padding: 2rem;
+}

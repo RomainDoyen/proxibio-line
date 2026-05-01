@@ -1,22 +1,19 @@
 import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./Login.css";
-import { account } from "../config/index";
 import { useNavigate } from "react-router-dom";
 import { UserAuthContext } from "../context/UserAuthContext";
 import { errorMessage, successMessage } from "../utils/customToast";
 import { UserAuthContextType } from "../types/userTypes";
-import { Models } from "appwrite";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Loader from "../components/ui/Loader";
 import { TailSpin } from 'react-loader-spinner';
 import { validateEmail, validatePassword } from "../utils/CheckForm";
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { postLoginPath } from "../utils/postLoginPath";
 
 const Login: React.FC = () => {
   const { setUser, user } = useContext(UserAuthContext) as UserAuthContextType;
-  // console.log(user);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -29,10 +26,10 @@ const Login: React.FC = () => {
   const [passwordValid, setPasswordValid] = useState<boolean>(false);
 
   useEffect(() => {
-    if(user !== null){
-       navigate("/");
+    if (user !== null) {
+      navigate(postLoginPath(user.role), { replace: true });
     }
-  }, [user, navigate])
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,17 +50,22 @@ const Login: React.FC = () => {
     }
 
     try {
-      const session: Models.Session = await account.createEmailPasswordSession(email, password);
-      const userFromSession = {
-        // name: session.clientName || "Nom inconnu",
-        email: session.providerUid || "Email inconnu",
-        id: session.userId,
-      };
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
 
+      if (!res.ok) {
+        errorMessage("E-mail ou mot de passe incorrect");
+        return;
+      }
+
+      const userData = await res.json();
       successMessage("Connexion réussie 🚀");
-
-      setUser(userFromSession);
-      navigate("/");
+      setUser(userData);
+      navigate(postLoginPath(userData.role), { replace: true });
     } catch (error) {
       console.log(error);
       errorMessage("Erreur lors de la connexion");
@@ -73,9 +75,13 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="loginPage">
-      <h2>Connexion</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h2>Connexion</h2>
+        <p className="auth-subtitle">
+          Accède à la carte des producteurs et contribue aux circuits courts près de chez toi.
+        </p>
+        <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <Input 
@@ -128,9 +134,10 @@ const Login: React.FC = () => {
           className="btn btn-primary"
         />
         <div className="reg">
-          Vous n'avez pas de compte ? <Link to="/register">S'enregistrer</Link>
+          Vous n&apos;avez pas de compte ? <Link to="/register">S&apos;inscrire</Link>
         </div>
       </form>
+      </div>
     </div>
   );
 };

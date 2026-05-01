@@ -1,20 +1,28 @@
 import { createContext, useEffect, useState } from "react";
-import { account } from "../config/index";
 import { User, UserAuthContextType, UserProviderProps } from "../types/userTypes";
 
 export const UserAuthContext = createContext<UserAuthContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-
-  const [isLoading, setIsLoading] = useState<boolean>(true); 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchUserData = async () => {
     try {
-      const response: User = await account.get(); 
-      setUser(response); 
+      const res = await fetch("/api/auth/me", { credentials: "include" });
+      if (res.status === 401) {
+        setUser(null);
+        return;
+      }
+      if (!res.ok) {
+        setUser(null);
+        return;
+      }
+      const data = (await res.json()) as User;
+      setUser(data);
     } catch (error) {
       console.error("Erreur lors de la récupération des données utilisateur :", error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -25,7 +33,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <UserAuthContext.Provider value={{ user, setUser, isLoading }}>
+    <UserAuthContext.Provider value={{ user, setUser, isLoading, refreshUser: fetchUserData }}>
       {children}
     </UserAuthContext.Provider>
   );

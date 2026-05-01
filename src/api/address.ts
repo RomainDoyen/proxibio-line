@@ -1,31 +1,24 @@
 import { GeocodeResult, SearchResult } from "../types/mapTypes";
 
-export const geocodeAddress = async (address: string): Promise<GeocodeResult> => {
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;
-  try {
-    const response: Response = await fetch(url);
-    const data: Array<{ lat: string, lon: string }> = await response.json();
-    if (data.length > 0) {
-      const { lat, lon } = data[0];
-      return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
-    } else {
-      throw new Error('No results found');
-    }
-  } catch (error) {
-    console.error('Error during geocoding:', error);
-    throw error;
+async function fetchPlaces(address: string, limit: number): Promise<SearchResult[]> {
+  const res = await fetch(
+    `/api/places/search?q=${encodeURIComponent(address)}&limit=${limit}`
+  );
+  if (!res.ok) {
+    throw new Error(`Geocoding HTTP ${res.status}`);
   }
+  return res.json() as Promise<SearchResult[]>;
+}
+
+export const geocodeAddress = async (address: string): Promise<GeocodeResult> => {
+  const data = await fetchPlaces(address, 1);
+  if (data.length > 0) {
+    const { lat, lon } = data[0];
+    return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
+  }
+  throw new Error("No results found");
 };
 
-// Recherche de l'adresse avec leaftlet
 export const searchAddress = async (address: string): Promise<SearchResult[]> => {
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=5`;
-  try {
-    const response: Response = await fetch(url);
-    const data: SearchResult[] = await response.json();
-    return data; // Renvoie la liste des résultats
-  } catch (error) {
-    console.error('Error during geocoding:', error);
-    throw error;
-  }
+  return fetchPlaces(address, 5);
 };

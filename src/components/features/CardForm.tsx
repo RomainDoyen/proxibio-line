@@ -1,23 +1,33 @@
-import { useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { errorMessage, successMessage } from '../../utils/customToast';
 import { geocodeAddress, searchAddress } from '../../api/address';
-import { supabase } from "../../config/index";
 import { CardFormProps } from '../../types/uiTypes';
 import { SuggestionType } from '../../types/mapTypes';
-import { abIcon, venteDirectIcon } from '../../utils/customMarker';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import './CardForm.css';
 import { validateNameProducteur, validateNameEnterprise, validateAddress } from "../../utils/CheckForm";
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { UserAuthContext } from '../../context/UserAuthContext';
+import { UserAuthContextType } from '../../types/userTypes';
+import { ProducerProfileFields } from './ProducerProfileFields';
+import {
+  emptyProducerProfileFormState,
+  type ProducerProfileFormState,
+} from '../../utils/producerProfileFormState';
 
 export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Element {
+  const { user } = useContext(UserAuthContext) as UserAuthContextType;
+  const isProducer = user?.role === 'PRODUCER';
 
   const [name, setName] = useState<string>('');
   const [nameEnterprise, setNameEnterprise] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const [typeAgriculture, setTypeAgriculture] = useState<string>('ab');
   const [suggestions, setSuggestions] = useState<SuggestionType[]>([]);
+  const [profileExtra, setProfileExtra] = useState<ProducerProfileFormState>(() =>
+    emptyProducerProfileFormState()
+  );
 
   const [nameError, setNameError] = useState<string>("");
   const [nameEnterpriseError, setNameEnterpriseError] = useState<string>("");
@@ -27,38 +37,36 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
   const [userEnterpriseValid, setUserEnterpriseValid] = useState<boolean>(false);
   const [userAddressValid, setUserAddressValid] = useState<boolean>(false);
 
-  const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+  const addressSearchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const address = e.target.value;
     setSelectedAddress(address);
 
-    const userProducteurValidation = validateNameProducteur(name);
-    const userEnterpriseValidation = validateNameEnterprise(nameEnterprise);
-    const userAddressValidation = validateAddress(selectedAddress);
-
-    setNameError(userProducteurValidation.error);
-    setUserProducteurValid(userProducteurValidation.isValid);
-    
-    setNameEnterpriseError(userEnterpriseValidation.error);
-    setUserEnterpriseValid(userEnterpriseValidation.isValid);
-
+    const userAddressValidation = validateAddress(address);
     setAddressError(userAddressValidation.error);
     setUserAddressValid(userAddressValidation.isValid);
 
-    if (!userProducteurValidation.isValid || !userEnterpriseValidation.isValid || !userAddressValidation.isValid) {
+    if (addressSearchTimer.current) {
+      clearTimeout(addressSearchTimer.current);
+    }
+
+    if (address.trim().length <= 2) {
+      setSuggestions([]);
       return;
     }
 
-    if (address.length > 2) {
-      try {
-        const results = await searchAddress(address);
-        setSuggestions(results);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des suggestions:', (error as Error).message);
-        setSuggestions([]);
-      }
-    } else {
-      setSuggestions([]);
-    }
+    addressSearchTimer.current = setTimeout(() => {
+      void (async () => {
+        try {
+          const results = await searchAddress(address);
+          setSuggestions(results);
+        } catch (error) {
+          console.error('Erreur lors de la récupération des suggestions:', (error as Error).message);
+          setSuggestions([]);
+        }
+      })();
+    }, 350);
   };
 
   const handleAddressSelect = (address: string): void => {
@@ -69,60 +77,65 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const updatedAt = new Date().toISOString();
-
     try {
-      // Géocodage de l'adresse
       const { latitude, longitude }: { latitude: number; longitude: number } = await geocodeAddress(selectedAddress);
 
-      // Vérification si l'adresse existe déjà
-      const { data: existingProducteurs, error: checkError } = await supabase
-        .from('Producteur')
-        .select('id')
-        .eq('address', selectedAddress);
+      const basePayload = {
+        name,
+        nameEnterprise,
+        address: selectedAddress,
+        latitude,
+        longitude,
+        marker: typeAgriculture,
+      };
+      const producerPayload = isProducer
+        ? {
+            ...basePayload,
+            profileImageUrl: profileExtra.profileImageUrl,
+            description: profileExtra.description.trim() || null,
+            tags: profileExtra.tags,
+            sellsCategories: profileExtra.sellsCategories,
+            phone: profileExtra.phone.trim() || null,
+            contactEmail: profileExtra.contactEmail.trim() || null,
+            website: profileExtra.website.trim() || null,
+            instagram: profileExtra.instagram.trim() || null,
+            facebook: profileExtra.facebook.trim() || null,
+          }
+        : basePayload;
 
-      if (checkError) {
-        throw checkError;
-      }
+      const res = await fetch('/api/producteurs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(producerPayload),
+      });
 
-      if (existingProducteurs && existingProducteurs.length > 0) {
+      if (res.status === 409) {
         errorMessage("Cette adresse existe déjà dans la base de données.");
         return;
       }
 
-      const { data, error } = await supabase
-        .from('Producteur')
-        .insert([{ name, nameEnterprise, address: selectedAddress, updatedAt }])
-        .select();
-
-      if (error) {
-        throw error;
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
       }
 
-      if (data && data.length > 0) {
-        const producteurId: number = data[0].id;
+      const created = (await res.json()) as { status?: string };
+      onProducteurAdded();
 
-        const { error: positionError } = await supabase
-          .from('positionProducteur')
-          .insert([{ producteurId, latitude, longitude, marker: typeAgriculture }]);
-
-        if (positionError) {
-          throw positionError;
-        }
-
-        onProducteurAdded();
-
-        successMessage("Producteur ajouté avec succès 🚀");
-
-        setName('');
-        setNameEnterprise('');
-        setSelectedAddress('');
-        setTypeAgriculture('ab');
-        setSuggestions([]);
+      if (created.status === "PENDING") {
+        successMessage(
+          "Fiche envoyée — elle apparaîtra sur la carte après validation par un modérateur."
+        );
       } else {
-        throw new Error("Aucune donnée n'a été renvoyée par l'insertion du Producteur");
+        successMessage("Producteur ajouté avec succès 🚀");
       }
 
+      setName('');
+      setNameEnterprise('');
+      setSelectedAddress('');
+      setTypeAgriculture('ab');
+      setSuggestions([]);
+      setProfileExtra(emptyProducerProfileFormState());
     } catch (error) {
       console.error("Erreur lors de l'ajout du producteur :", (error as Error).message);
       errorMessage("Erreur lors de l'ajout du producteur");
@@ -130,7 +143,7 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="producer-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="name">Nom du producteur</label>
         <Input 
@@ -160,14 +173,16 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
         {suggestions.length > 0 && (
           <ul className="suggestions-list">
             {suggestions.map((suggestion, index) => (
-              <li 
-                key={index} 
+              <li
+                key={index}
                 onClick={() => {
-                  handleAddressSelect(suggestion.display_name);
-                  const validation = validateAddress(selectedAddress);
+                  const picked = suggestion.display_name;
+                  handleAddressSelect(picked);
+                  const validation = validateAddress(picked);
                   setAddressError(validation.error);
                   setUserAddressValid(validation.isValid);
-                }}>
+                }}
+              >
                 {suggestion.display_name}
               </li>
             ))}
@@ -195,17 +210,20 @@ export default function CardForm({ onProducteurAdded }: CardFormProps): JSX.Elem
       </div>
       <div className="form-group">
         <label htmlFor="type-agriculture">Sélectionner le type d'agriculture</label>
-        <select 
-          className="form-control" 
-          id="type-agriculture" 
+        <select
+          className="form-control"
+          id="type-agriculture"
           value={typeAgriculture}
           onChange={(e) => setTypeAgriculture(e.target.value)}
           required
         >
-          {abIcon && <option value="ab">Agriculture biologique</option>}
-          {venteDirectIcon && <option value="venteDirect">Vente directe</option>}
+          <option value="ab">Agriculture biologique</option>
+          <option value="venteDirect">Vente directe</option>
         </select>
       </div>
+      {isProducer && (
+        <ProducerProfileFields value={profileExtra} onChange={setProfileExtra} />
+      )}
       <Button
         type="submit"
         text="Envoyer" 

@@ -14,18 +14,16 @@ const Dashboard: React.FC = () => {
   };
   
   return (
-    <>
-      <div className="dashboard-container">
-        <div className="form-container">
-          <CardForm onProducteurAdded={handleProducteurAdded} />
-          <Image src="./src/assets/loca.PNG" alt="Instruction" />
-        </div>
-        <div className="map-container">
-          <CardInfos />
-          <CardMaps refreshMap={refreshMap} />
-        </div>
+    <div className="dashboard-container">
+      <div className="dashboard-form-column" id="add-producer">
+        <CardForm onProducteurAdded={handleProducteurAdded} />
+        <Image src="./src/assets/loca.PNG" alt="Instructions pour ajouter un producteur" className="instruction-img" />
       </div>
-    </>
+      <div className="dashboard-map-column">
+        <CardInfos />
+        <CardMaps refreshMap={refreshMap} />
+      </div>
+    </div>
   );
 };
 

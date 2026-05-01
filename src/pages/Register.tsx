@@ -1,8 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import "./Register.css";
-import { account } from "../config/index";
-import { ID, Models } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import { errorMessage, successMessage } from "../utils/customToast";
 import Input from "../components/ui/Input";
@@ -11,9 +8,12 @@ import Loader from "../components/ui/Loader";
 import { TailSpin } from 'react-loader-spinner';
 import { validateUsername, validateEmail, validatePassword, validateConfirmPassword } from "../utils/CheckForm";
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { UserAuthContext } from "../context/UserAuthContext";
+import { UserAuthContextType } from "../types/userTypes";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(UserAuthContext) as UserAuthContextType;
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -57,27 +57,46 @@ const Register: React.FC = () => {
     }
 
     try {
-      const promise = account.create(ID.unique(), email, password, username) as Promise<Models.User<Models.Preferences>>;
-      promise.then(
-        function (response: Models.User<Models.Preferences>) {
-          console.log(response); // Success
-          successMessage("Compte créé avec succès 🚀");
-          navigate("/login");
-        },
-        function (error) {
-          console.log(error); // Failure
-          errorMessage("Erreur lors de la création du compte");
-        }
-      );
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          name: username,
+          email,
+          password,
+        }),
+      });
+
+      if (res.status === 409) {
+        errorMessage("Cette adresse e-mail est déjà utilisée.");
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const user = await res.json();
+      setUser(user);
+      successMessage("Compte créé avec succès 🚀");
+      navigate("/");
     } catch (err) {
-      console.log((err as Error).message);
+      console.error(err);
+      errorMessage("Erreur lors de la création du compte");
+    } finally {
+      setLoadingStatus(false);
     }
   };
 
   return (
-    <div className="registerPage">
-      <h2>S'enregistrer</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h2>Créer un compte</h2>
+        <p className="auth-subtitle">
+          Rejoins la communauté pour ajouter des producteurs et enrichir la carte collaborative.
+        </p>
+        <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Nom d'utilisateur:</label>
           <Input 
@@ -168,9 +187,10 @@ const Register: React.FC = () => {
           className="btn btn-primary"
         />
         <div className="reg">
-          Vous avez un compte ? <Link to="/login">Connexion</Link>
+          Vous avez déjà un compte ? <Link to="/login">Connexion</Link>
         </div>
       </form>
+      </div>
     </div>
   );
 };

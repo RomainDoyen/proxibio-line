@@ -4,9 +4,10 @@ import { UserAuthContext } from "../../context/UserAuthContext";
 import { UserAuthContextType } from "../../types/userTypes";
 
 const PrivateRoute: React.FC = () => {
-  const { user } = useContext<UserAuthContextType | undefined>(UserAuthContext) || {};
+  const ctx = useContext(UserAuthContext);
+  const user = (ctx as UserAuthContextType | undefined)?.user ?? null;
 
-  return user ? <Outlet /> : <Navigate to={"/login"} />;
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

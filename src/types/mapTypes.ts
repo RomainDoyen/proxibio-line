@@ -1,9 +1,3 @@
-export type IconOption = {
-  iconUrl: string;
-  className?: string;
-  iconSize: [number, number];
-};
-
 export type GeocodeResult = {
   latitude: number;
   longitude: number;

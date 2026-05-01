@@ -12,38 +12,48 @@ yarn install
 
 ## Config .env file
 
-Create a `.env` file in the root of the project and add the following content:
+Copy `.env.example` to `.env` and fill in the values.
 
-### Appwrite API
+### Neon (PostgreSQL) + API locale
 
-```bash
-VITE_APPWRITE_PROJECT_ID=<YOUR_APPWRITE_PROJECT_ID>
-```
-
-### Supabase API
+Les **comptes utilisateurs**, les **producteurs** et leurs positions sont stockés dans **Neon**. Le frontend appelle une API Express (`server/index.ts`) avec Prisma ; `DATABASE_URL` et `JWT_SECRET` restent côté serveur uniquement.
 
 ```bash
-VITE_SUPABASE_URL=<YOUR_SUPABASE_URL>
-VITE_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
+DATABASE_URL=<URL_de_connexion_Neon>
+API_PORT=3001
+JWT_SECRET=<chaîne_secrète_longue>
 ```
 
-### Prisma
+Dans la console Neon, copie l’URL **pooled** (pour l’app). Pour `prisma migrate`, si tu rencontres des erreurs avec le pooler, ajoute une URL **direct** (non `-pooler`) et `directUrl` dans `prisma/schema.prisma` (voir [doc Prisma + Neon](https://www.prisma.io/docs/guides/database/neon)).
 
-```bash
-DATABASE_URL=<YOUR_DATABASE_URL>
-```
-Run a migration to create your database tables with Prisma Migrate
+Créer / mettre à jour les tables :
 
 ```bash
-npx prisma migrate dev --name init
+npx prisma migrate dev
 ```
-Generate Prisma Client
+
+Générer le client Prisma :
 
 ```bash
 npx prisma generate
 ```
+
+**Session :** après connexion ou inscription, un cookie httpOnly `proxibio_session` est posé. Les requêtes `fetch` vers `/api/auth/*` utilisent `credentials: "include"` ; le proxy Vite transmet les cookies en dev.
+
 ## Run the project
+
+Lance Vite et l’API en parallèle :
 
 ```bash
 yarn dev
 ```
+
+Pour le frontend seul (sans API) :
+
+```bash
+yarn dev:web
+```
+
+## Production
+
+Le build Vite (`npm run build`) ne contient pas l’API : il faut déployer `server/` avec les mêmes variables d’environnement, configurer CORS / cookies selon ton domaine, et faire pointer le frontend vers cette API (ou reverse-proxy `/api`).

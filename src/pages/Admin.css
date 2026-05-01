@@ -1,0 +1,334 @@
+.admin-page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  margin-bottom: 1.5rem;
+}
+
+.admin-title {
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem;
+  color: var(--color-text);
+}
+
+.admin-lead {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  max-width: 52rem;
+}
+
+.admin-code {
+  font-size: 0.82rem;
+  padding: 0.12rem 0.35rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-accent);
+}
+
+.admin-loading {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 2rem;
+}
+
+.admin-section {
+  margin-bottom: 1.5rem;
+}
+
+.admin-section h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: var(--color-text);
+}
+
+.admin-panel {
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.admin-table th {
+  font-weight: 600;
+  color: var(--color-sage);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+}
+
+.admin-table tbody tr:hover {
+  background: var(--color-surface);
+}
+
+.admin-select {
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
+  background: rgba(15, 28, 45, 0.85);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  min-width: 8rem;
+}
+
+.admin-btn-danger {
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  transition: filter 0.15s ease;
+}
+
+.admin-btn-danger:hover {
+  filter: brightness(1.08);
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.admin-btn-export {
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-btn-export:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.admin-dashboard h2 {
+  margin-bottom: 0.85rem;
+}
+
+.admin-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-kpi {
+  min-width: 120px;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-kpi--alert {
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.admin-kpi--wide {
+  flex: 1;
+  min-width: 200px;
+}
+
+.admin-kpi-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+}
+
+.admin-kpi-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.admin-kpi-roles {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.admin-charts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .admin-charts {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.admin-chart-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-sage);
+  margin: 0 0 0.5rem;
+}
+
+.admin-chart-scroll {
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+}
+
+.admin-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  min-height: 100px;
+  min-width: min(100%, 520px);
+}
+
+.admin-chart-cell {
+  flex: 1;
+  min-width: 8px;
+  max-width: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100px;
+  justify-content: flex-end;
+}
+
+.admin-chart-bar {
+  width: 100%;
+  min-height: 2px;
+  background: linear-gradient(180deg, var(--color-accent) 0%, #2dd4bf 100%);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.2s ease;
+}
+
+.admin-chart-tick {
+  font-size: 0.55rem;
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
+  line-height: 1;
+}
+
+.admin-dup-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.admin-dup-card {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.admin-dup-key {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin: 0 0 0.5rem;
+  word-break: break-word;
+}
+
+.admin-dup-list {
+  margin: 0 0 0.85rem;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.admin-dup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.admin-dup-actions label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-btn-merge {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-navy-deep);
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+  align-self: flex-end;
+}
+
+.admin-btn-merge:hover {
+  filter: brightness(1.06);
+}
+
+.admin-btn-soft {
+  padding: 0.4rem 0.55rem;
+  margin-right: 0.35rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.admin-btn-soft:hover {
+  background: var(--color-surface);
+}
+
+.admin-actions-cell {
+  white-space: nowrap;
+}
+
+.admin-select--status {
+  min-width: 7.5rem;
+}

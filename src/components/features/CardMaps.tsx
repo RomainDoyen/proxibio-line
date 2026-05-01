@@ -2,11 +2,11 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import { supabase } from "../../config/index";
 import { CardMapsProps } from "../../types/uiTypes";
 import { ProducteurType } from "../../types/productTypes";
-import { abIcon, createClusterCustomIcon, venteDirectIcon } from "../../utils/customMarker";
+import { createClusterCustomIcon, createProducerMarkerIcon } from "../../utils/customMarker";
 import { EnableZoomButton } from "./EnableZoomButton";
+import { MapProducerPopup } from "./MapProducerPopup";
 import './CardMaps.css';
 
 export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
@@ -14,32 +14,11 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
 
   const fetchProducteurs = async (): Promise<void> => {
     try {
-      const { data: producteursData, error: producteursError } = await supabase
-        .from('Producteur')
-        .select('*');
-
-      if (producteursError) {
-        throw producteursError;
+      const res = await fetch('/api/producteurs');
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
       }
-
-      const producteursWithPositions = await Promise.all(
-        producteursData.map(async (producteur): Promise<ProducteurType> => {
-          const { data: positionsData, error: positionsError } = await supabase
-            .from('positionProducteur')
-            .select('*')
-            .eq('producteurId', producteur.id);
-
-          if (positionsError) {
-            throw positionsError;
-          }
-
-          return {
-            ...producteur,
-            positionProducteur: positionsData || [],
-          };
-        })
-      );
-
+      const producteursWithPositions = (await res.json()) as ProducteurType[];
       setProducteurs(producteursWithPositions);
     } catch (error) {
       console.error("Erreur lors de la récupération des producteurs :", (error as Error).message);
@@ -51,7 +30,12 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
   }, [refreshMap]);
 
   return (
-    <MapContainer center={[-21.12165459276416, 55.54070004999999]} zoom={10} scrollWheelZoom={false}>
+    <MapContainer
+      className="card-maps-leaflet"
+      center={[-21.12165459276416, 55.54070004999999]}
+      zoom={10}
+      scrollWheelZoom={false}
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -60,7 +44,7 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
         chunkedLoading
         iconCreateFunction={createClusterCustomIcon}
       >
-        {producteurs.map((producteur, index) => {
+        {producteurs.map((producteur) => {
           if (!producteur.positionProducteur || producteur.positionProducteur.length === 0) {
             return null;
           }
@@ -68,18 +52,19 @@ export default function CardMaps({ refreshMap }: CardMapsProps): JSX.Element {
           const position = producteur.positionProducteur[0];
           return (
             <Marker
-              key={index}
+              key={producteur.id}
               position={[position.latitude, position.longitude]}
-              icon={position.marker === 'ab' ? abIcon : venteDirectIcon}
+              icon={createProducerMarkerIcon(position.marker)}
             >
-              <Popup>
-                <div>
-                  <strong>{producteur.name}</strong><br />
-                  <em>{producteur.nameEnterprise}</em><br />
-                  {producteur.address}
-                </div>
+              <Popup className="map-popup-shell" maxWidth={340} minWidth={280}>
+                <MapProducerPopup producteur={producteur} />
               </Popup>
-              <Tooltip direction="top" offset={[0, -10]}>
+              <Tooltip
+                direction="top"
+                offset={[0, -14]}
+                opacity={1}
+                className="map-marker-tooltip"
+              >
                 {producteur.nameEnterprise}
               </Tooltip>
             </Marker>

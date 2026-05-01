@@ -1,14 +1,17 @@
+export type UserRole = 'USER' | 'PRODUCER' | 'ADMIN';
+
 export type User = {
-  name?: string;
+  id: string;
   email: string;
-  id?: string;
-  providerUid?: string;
+  name: string;
+  role: UserRole;
 };
 
 export type UserAuthContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
   isLoading: boolean;
+  refreshUser: () => Promise<void>;
 };
 
 export type UserProviderProps = {
